@@ -1,0 +1,12 @@
+{{ if .Values.sc.enabled }}
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ include "rapidfort.fullname" . }}
+  labels:
+    {{- include "rapidfort.labels" . | nindent 4 }}  
+provisioner: kubernetes.io/no-provisioner
+reclaimPolicy: Retain
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
+{{ end }}

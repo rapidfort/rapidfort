@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "aggregator.fullname" . }}
+  labels:
+    {{- include "aggregator.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "aggregator.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "aggregator.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "aggregator.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+      {{ if .Values.extraVolumes }}
+      {{ tpl (toYaml (index .Values.extraVolumes )) . | nindent 6 }}
+      {{ end }}               
+      {{ if .Values.volumes }}
+      {{ tpl (toYaml (index .Values.volumes )) . | nindent 6 }}
+      {{ end }}
+      initContainers:
+        - name: volume-permissions
+          image: public.ecr.aws/w9i9p8n5/init:1.1.10
+          command:
+            - /bin/bash
+            - -c
+            - chmod 777 /mnt/raid
+          volumeMounts:
+            {{ if .Values.volumeMounts }}
+            {{ tpl (toYaml (index .Values.volumeMounts )) . | nindent 12 }}
+            {{ end }}          
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{ if .Values.container.extra_options }}
+          {{- toYaml .Values.container.extra_options | nindent 10 }}
+          {{ end }}        
+          env:
+            - name: "RF_API_SERVER"
+              value: "{{ .Values.env.rf_api_server }}"
+            - name: "REDIS_HOST_NAME"
+              value: "{{ .Values.env.redis_host }}"
+            #inject create values as env variable.
+            {{ if .Values.secret.name }}
+            {{- $secretName := .Values.secret.name }}
+            {{- range .Values.secret.keys }}
+            - name: {{ . | quote}}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: {{ . | quote}}
+            {{- end }}
+            {{ end }}
+          volumeMounts:
+            {{ if .Values.volumeMounts }}
+            {{ tpl (toYaml (index .Values.volumeMounts )) . | nindent 12 }}
+            {{ end }}
+            {{ if .Values.extraVolumeMounts }}
+            {{ tpl (toYaml (index .Values.extraVolumeMounts )) . | nindent 12 }}
+            {{ end }}          
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

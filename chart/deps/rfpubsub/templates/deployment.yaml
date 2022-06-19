@@ -1,0 +1,115 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "rfpubsub.fullname" . }}
+  labels:
+    {{- include "rfpubsub.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "rfpubsub.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "rfpubsub.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "rfpubsub.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+      {{ if .Values.volumes }}
+      {{ tpl (toYaml (index .Values.volumes )) . | nindent 6 }}
+      {{ end }}
+      {{ if .Values.extraVolumes }}
+      {{ tpl (toYaml (index .Values.extraVolumes )) . | nindent 6 }}
+      {{ end }}   
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{ if .Values.container.extra_options }}
+          {{- toYaml .Values.container.extra_options | nindent 10 }}
+          {{ end }}                  
+          env:
+            - name: RFPUBSUB_WS_PORT
+              value: "{{ .Values.service.container_port }}"
+            - name: RF_REDIS_HOST_NAME_HA
+              value: "{{ .Values.env.redis_host_ha }}"                     
+            - name: RF_REDIS_PORT_HA
+              value: "{{ .Values.env.redis_port_ha }}"
+            - name: RF_REDIS_PWD_HA
+              value: "{{ .Values.env.redis_pwd_ha }}"
+            - name: RF_REDIS_DB_HA
+              value: "{{ .Values.env.redis_db_ha }}"
+            - name: RF_REDIS_HOST_NAME
+              value: "{{ .Values.env.redis_host }}"
+            - name: RF_REDIS_PORT
+              value: "{{ .Values.env.redis_port }}"
+            - name: RF_REDIS_PWD
+              value: "{{ .Values.env.redis_pwd }}"                 
+            - name: "RF_DEBUG"
+              value:  "{{ .Values.env.rf_debug }}"
+            - name: "RF_API_SERVER"
+              value:  "{{ .Values.env.rf_api_server }}"
+            - name: "API_KEY"
+              value: "{{ .Values.env.api_key }}" #TODO: confirm new api key - 03f4b34739f506f88c9bbc3410b5d070
+            #inject create values as env variable.
+            {{ if .Values.secret.name }}
+            {{- $secretName := .Values.secret.name }}
+            {{- range .Values.secret.keys }}
+            - name: {{ . | quote}}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: {{ . | quote}}
+            {{- end }}
+            - name: DATA_PLANE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: RF_APP_HOST                
+            {{ end }}
+          volumeMounts:
+            {{ if .Values.extraVolumeMounts }}
+            {{ tpl (toYaml (index .Values.extraVolumeMounts )) . | nindent 12 }}
+            {{ end }}   
+            {{ if .Values.volumeMounts }}
+            {{ tpl (toYaml (index .Values.volumeMounts )) . | nindent 12 }}
+            {{ end }}            
+          ports:
+            - name: rfpubsub-http
+              containerPort: {{ .Values.service.container_port }}
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+            {{- toYaml .Values.probeCommand | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+            {{- toYaml .Values.probeCommand | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

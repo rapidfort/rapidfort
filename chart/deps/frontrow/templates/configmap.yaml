@@ -1,0 +1,11 @@
+{{- if .Values.authUrl }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keycloak-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "frontrow.selectorLabels" . | nindent 4 }}
+data:
+  {{ (tpl (.Files.Glob "config_map/*.json").AsConfig $ ) | nindent 2 }}
+{{- end }}

@@ -1,0 +1,39 @@
+dependencies:
+- name: backend
+  repository: file://deps/backend/
+  version: 1.1.0
+- name: iso-master
+  repository: file://deps/iso-master/
+  version: 1.1.0
+- name: rf-scan
+  repository: file://deps/rf-scan/
+  version: 1.1.0
+- name: frontrow
+  repository: file://deps/frontrow/
+  version: 1.1.0
+- name: rfapi
+  repository: file://deps/rfapi/
+  version: 1.1.0
+- name: rfpubsub
+  repository: file://deps/rfpubsub/
+  version: 1.1.0
+- name: aggregator
+  repository: file://deps/aggregator/
+  version: 1.1.0
+- name: keycloak
+  repository: file://deps/keycloak/
+  version: 1.1.0
+- name: redis
+  repository: file://deps/redis/
+  version: 1.1.0
+- name: mysql
+  repository: file://deps/mysql/
+  version: 1.1.0
+- name: runner
+  repository: file://deps/runner/
+  version: 1.1.0
+- name: fluent-bit
+  repository: file://deps/fluent-bit/
+  version: 1.1.0
+digest: sha256:1c23170311b437cc19b83394e86a40b23b9e7ae8b69504889bdb8e89a230b84e
+generated: "2022-06-19T00:39:47.405043784-07:00"

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "rfapi.fullname" . }}
+  labels:
+    {{- include "rfapi.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: rfapi-http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "rfapi.selectorLabels" . | nindent 4 }}

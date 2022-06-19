@@ -1,0 +1,129 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "iso-master.fullname" . }}
+  labels:
+    {{- include "iso-master.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "iso-master.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "iso-master.selectorLabels" . | nindent 8 }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      serviceAccountName: {{ include "iso-master.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+      {{ if .Values.volumes }}
+      {{ tpl (toYaml (index .Values.volumes )) . | nindent 6 }}
+      {{ end }}
+      {{ if .Values.extraVolumes }}
+      {{ tpl (toYaml (index .Values.extraVolumes )) . | nindent 6 }}
+      {{ end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{ if .Values.container.extra_options }}
+          {{- toYaml .Values.container.extra_options | nindent 10 }}
+          {{ end }}         
+          ports:
+            - name: isomaster-http
+              containerPort: {{ .Values.service.container_port }}
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+            {{- toYaml .Values.probeCommand | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+            {{- toYaml .Values.probeCommand | nindent 12 }}
+          env:
+            - name: RF_DEBUG
+              value: "{{ .Values.env.rf_debug }}"
+            #start: Tunneling stub env vars
+            {{ if .Values.tunnelStubendabled }}
+            - name: AMI_IMAGE_ID
+              value: "{{ .Values.env.ami_image_id }}"
+            - value: KEYPAIR_NAME
+              name: "rf-iso-worker-1.0"
+            - name: VMPOOL_APP_PORT
+              value: "{{ .Values.env.vm_scheduler_port }}"
+            - name: VMPOOL_SERVER_ADDR
+              value: "{{ .Values.env.vm_server_addr }}"
+            - name: SECGROUP_ID
+              value: "{{ .Values.env.security_group_id }}"
+            - name: VPC_SUBNET_ID
+              value: "{{ .Values.env.vpc_subnet_id }}"
+            {{ end }}
+            #end
+            {{ if .Values.secret.name }}
+            {{- $secretName := .Values.secret.name }}
+            {{- range .Values.secret.keys }}
+            - name: {{ . | quote}}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: {{ . | quote}}
+            {{- end }}
+            - name: DATA_PLANE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: RF_APP_HOST      
+            {{ end }}
+            - name: "ISOMASTER_APP_PORT"
+              value: "{{ .Values.service.container_port }}"
+            - name: "BACKEND_SERVICE_NAME"
+              value: "{{ .Values.env.backend_service_name}}"
+            - name: AUTH_SERVER_ROOT_URL
+              value: "http://{{ .Values.keycloak.serviceName }}"
+            - name: DEFAULT_STUB_TYPE
+              value: "monitoring"
+            - name: BACKEND_APP_PORT
+              value: "80"
+            - name: RF_REDIS_HOST_NAME_HA
+              value: "{{ .Values.env.redis_host_ha }}"                     
+            - name: RF_REDIS_PORT_HA
+              value: "{{ .Values.env.redis_port_ha }}"
+            - name: RF_REDIS_PWD_HA
+              value: "{{ .Values.env.redis_pwd_ha }}"
+            - name: RF_REDIS_DB_HA
+              value: "{{ .Values.env.redis_db_ha }}"
+            - name: RF_REDIS_HOST_NAME
+              value: "{{ .Values.env.redis_host }}"
+            - name: RF_REDIS_PORT
+              value: "{{ .Values.env.redis_port }}"
+            - name: RF_REDIS_PWD
+              value: "{{ .Values.env.redis_pwd }}"              
+          volumeMounts:
+            {{ if .Values.volumeMounts }}
+            {{ tpl (toYaml (index .Values.volumeMounts )) . | nindent 12 }}
+            {{ end }}
+            {{ if .Values.extraVolumeMounts }}
+            {{ tpl (toYaml (index .Values.extraVolumeMounts )) . | nindent 12 }}
+            {{ end }}                  
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+

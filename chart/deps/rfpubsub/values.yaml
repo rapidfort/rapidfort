@@ -1,0 +1,135 @@
+# Default values for rfpubsub.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: 274057717848.dkr.ecr.us-east-1.amazonaws.com/rfpubsub
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+
+env:
+  rf_api_server: "iso-master"
+  api_key: "03f4b34739f506f88c9bbc3410b5d070"
+  rf_debug: false
+  redis_host: "redis"
+  redis_port: "6379"
+  redis_pwd: "" 
+  redis_host_ha: "redis"
+  redis_port_ha: "6379"
+  redis_pwd_ha: ""
+  redis_db_ha: 4   
+
+secret:
+  name: "rf-secret"
+  keys:
+    - RF_APP_HOST
+    - RF_ROLE_ARN
+    - DEPLOY_MODE
+    - RF_VERBOSE    
+
+global:
+  rf_app_host: ""
+
+imagePullSecrets: []
+nameOverride: "rfpubsub"
+fullnameOverride: "rfpubsub"
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+  container_port: 8080
+
+ingress:
+  enabled: true
+  className: ""
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      proxy_set_header Upgrade "websocket";
+      proxy_set_header Connection "Upgrade";
+    nginx.ingress.kubernetes.io/server-snippets: |
+      location /rfpubsub {
+        proxy_set_header X-Forwarded-Host $http_host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header Host $host;
+      }
+  hosts:
+    - host:
+      paths:
+        - path: /rfpubsub
+          pathType: ImplementationSpecific
+  tls: []
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+volumes:
+volumeMounts:
+
+container:
+  extra_options: {}
+
+livenessProbe:
+  periodSeconds: 30
+  initialDelaySeconds: 15
+  timeoutSeconds: 10
+
+probeCommand:  
+  exec:
+    command:
+      - /bin/sh
+      - -c
+      - "pgrep websocketd"
+
+readinessProbe:
+  periodSeconds: 30
+  initialDelaySeconds: 15
+  timeoutSeconds: 10 

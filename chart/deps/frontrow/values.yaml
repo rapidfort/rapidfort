@@ -1,0 +1,108 @@
+# Default values for frontrow.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: 274057717848.dkr.ecr.us-east-1.amazonaws.com/frontrow
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: "frontrow"
+fullnameOverride: "frontrow"
+
+global:
+  rf_app_host: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+  container_port: 8080
+
+ingress:
+  enabled: true
+  className: ""
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"    
+    # nginx.ingress.kubernetes.io/limit-rps: 100
+  hosts:
+    - host:
+      paths:
+        - path: /.*
+          pathType: ImplementationSpecific
+        - path: /cli/.*
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+authUrl: ""
+
+env:
+  rf_debug: false
+
+secret:
+  name: "rf-secret"
+  keys:
+    - RF_APP_HOST
+    - DEPLOY_MODE
+
+container:
+  extra_options: {}
+
+livenessProbe:
+  periodSeconds: 30
+  initialDelaySeconds: 15
+  timeoutSeconds: 10 
+
+readinessProbe:
+  periodSeconds: 30
+  initialDelaySeconds: 15
+  timeoutSeconds: 10
+
+probeCommand:  
+  httpGet:
+    path: /
+    port: frontrow-http

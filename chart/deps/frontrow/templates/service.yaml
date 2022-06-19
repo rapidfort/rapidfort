@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "frontrow.fullname" . }}
+  labels:
+    {{- include "frontrow.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: frontrow-http
+      protocol: TCP
+      name: frontrow-http
+  selector:
+    {{- include "frontrow.selectorLabels" . | nindent 4 }}

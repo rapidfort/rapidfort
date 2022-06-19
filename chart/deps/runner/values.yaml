@@ -1,0 +1,127 @@
+# Default values for runner.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: 274057717848.dkr.ecr.us-east-1.amazonaws.com/runner
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+
+initContainer:
+  image:
+    repository: public.ecr.aws/rapidfort/init 
+    pullPolicy: IfNotPresent
+    tag: "latest"
+
+imagePullSecrets: []
+nameOverride: "runner"
+fullnameOverride: "runner"
+
+global:
+  rf_app_host: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+service:
+  type: ClusterIP
+  port: 80
+  container_port: 8080
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+ingress:
+  enabled: true
+  className: ""
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  hosts:
+    - host:
+      paths:
+        - /runner/.*
+      paths:
+        - path: /runner/.*
+          pathType: ImplementationSpecific
+  tls: []
+
+securityContext: {}
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+secret:
+  name: rf-secret
+  keys:
+  - RF_APP_HOST
+  - AWS_DEFAULT_REGION
+  - RF_APP_ADMIN
+  - RF_APP_ADMIN_PASSWD
+
+env:
+  rf_debug: false
+  redis_host: "redis"
+  redis_port: "6379"
+  redis_pwd: ""
+  redis_host_ha: "redis"
+  redis_port_ha: "6379"
+  redis_pwd_ha: ""
+  redis_db_ha: 4
+
+volumes:
+  - name: dockersock
+    hostPath:
+      path: /var/run/docker.sock
+volumeMounts:
+  - name: dockersock
+    mountPath: "/var/run/docker.sock"
+
+livenessProbe:
+  periodSeconds: 30
+  initialDelaySeconds: 15
+  timeoutSeconds: 10
+
+probeCommand:  
+  httpGet:
+    path: /
+    port: runner-http
+
+readinessProbe:
+  periodSeconds: 30
+  initialDelaySeconds: 15
+  timeoutSeconds: 10 
+
+container:
+  extra_options: {}

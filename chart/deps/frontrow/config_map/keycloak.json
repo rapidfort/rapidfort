@@ -1,0 +1,9 @@
+{
+    "realm": "customers",
+    "auth-server-url": "{{ .Values.authUrl }}",
+    "ssl-required": "external",
+    "resource": "scanners",
+    "public-client": true,
+    "confidential-port": 0
+}
+  

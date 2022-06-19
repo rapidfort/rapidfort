@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ .Release.Name }}-daemonset
+  labels:
+    k8s-app: {{ .Release.Name }}
+    version: v1
+    kubernetes.io/cluster-service: "true"
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+        k8s-app: {{ .Release.Name }}
+        version: v1
+        kubernetes.io/cluster-service: "true"
+    spec:
+      containers:
+      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        name: {{ .Release.Name }}
+        env:
+          {{ if .Values.secret.name }}
+          {{- $secretName := .Values.secret.name }}
+          {{- range .Values.secret.keys }}
+          - name: {{ . | quote}}
+            valueFrom:
+              secretKeyRef:
+                name: {{ $secretName }}
+                key: {{ . | quote}}
+          {{- end }}
+          {{ end }}        
+        volumeMounts:
+        - name: fluentbitconfigvol
+          mountPath: /etc/fluent-bit/conf/
+        - name: varlog
+          mountPath: /var/log
+        - name: varlibdockercontainers
+          mountPath: /var/lib/docker/containers
+          readOnly: true
+        command: ["/fluent-bit/bin/fluent-bit"]
+        args: ["-c", "/etc/fluent-bit/conf/fluent-bit.conf"]
+      volumes:
+      - name: fluentbitconfigvol
+        configMap:
+          name:  {{ .Release.Name }}-configmap
+      - name: varlog
+        hostPath:
+          path: /var/log
+      - name: varlibdockercontainers
+        hostPath:

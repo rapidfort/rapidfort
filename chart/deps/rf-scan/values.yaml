@@ -1,0 +1,156 @@
+# Default values for rf-scan.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+
+replicaCount: 1
+
+image:
+  repository: 274057717848.dkr.ecr.us-east-1.amazonaws.com/rf-scan
+  pullPolicy: IfNotPresent
+
+global:
+  rf_app_host: ""
+
+env:
+  backend_service_name: "backend"
+  debug: off
+  rf_debug: false
+  redis_host: "redis"
+  redis_port: "6379"
+  redis_pwd: "" 
+  redis_host_ha: "redis"
+  redis_port_ha: "6379"
+  redis_pwd_ha: ""
+  redis_db_ha: 4   
+
+imagePullSecrets: []
+nameOverride: "rf-scan"
+fullnameOverride: "rf-scan"
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+  container_port: 8080
+
+ingress:
+  enabled: true
+  className: ""
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+  hosts:
+    - host: 
+      paths:
+        - path: /rf-scan/.*
+          pathType: ImplementationSpecific
+  tls: []
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits:
+    cpu: 250m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 512Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+keycloak:
+  serviceName: keycloak
+
+secret:
+  name: "rf-secret"
+  keys:
+    - AWS_DEFAULT_REGION
+    - DB_URL
+    - RF_S3_BUCKET
+    - KEYCLOAK_JWT_PUB_KEY
+    - KEYCLOAK_REALM
+    - KEYCLOAK_CLIENT_ID
+    - KEYCLOAK_SERVICE_ACCOUNT_CLIENT_ID
+    - KEYCLOAK_SERVICE_ACCOUNT_CLIENT_SECRET
+    - ADMIN_ROLE_ID
+    - MEMBER_ROLE_ID
+    - GUEST_ROLE_ID
+    - RF_APP_HOST
+    - AWS_ACCESS_KEY_ID
+    - AWS_SECRET_ACCESS_KEY
+    - RF_ROLE_ARN
+    - DEPLOY_MODE
+    - RF_VERBOSE
+
+volumes:
+  - name: imgs-work-dir
+    hostPath:
+      path: /opt/rapidfort/data/shared/imgs_work_dir
+  - name: image-db
+    hostPath:
+      path: /opt/rapidfort/data/shared/image_db
+  - name: dockersock
+    hostPath:
+      path: /var/run/docker.sock
+  - name: local-bucket
+    hostPath:
+      path: /opt/rapidfort/local-bucket/
+
+volumeMounts:
+  - name: imgs-work-dir
+    mountPath: "/opt/rapidfort/iso-master/app/imgs_work_dir"
+  - name: image-db
+    mountPath: "/opt/rapidfort/iso-master/app/image_db"
+  - name: dockersock
+    mountPath: "/var/run/docker.sock"
+  - name: local-bucket
+    mountPath: "/opt/rapidfort/local-bucket"
+
+container:
+  extra_options: {}
+
+livenessProbe:
+  periodSeconds: 30
+  initialDelaySeconds: 15
+  timeoutSeconds: 10
+  failureThreshold: 1
+
+readinessProbe:
+  periodSeconds: 30
+  initialDelaySeconds: 15
+  timeoutSeconds: 10
+  failureThreshold: 1
+  
+probeCommand:
+  httpGet:
+    path: /
+    port: rf-scan-http  

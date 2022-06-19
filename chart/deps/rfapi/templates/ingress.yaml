@@ -1,0 +1,93 @@
+{{- if .Values.ingress.websocket.enabled -}}
+{{- $fullName := include "rfapi.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+{{- $rf_host := .Values.global.rf_app_host }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}-websocket
+  labels:
+    {{- include "rfapi.labels" . | nindent 4 }}
+  {{- with .Values.ingress.websocket.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  ingressClassName: {{ default .Values.ingress.websocket.className .Values.global.ingressClassName }}
+  {{- if .Values.ingress.websocket.tls }}
+  tls:
+    {{- range .Values.ingress.websocket.tls }}
+    - hosts:
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
+  rules:
+  {{- range .Values.ingress.websocket.hosts }}
+    - http:
+        paths:
+        {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
+            backend:
+              service:
+                name: {{ $fullName }}
+                port:
+                  number: {{ $svcPort }}
+        {{- end }}
+      {{ if $rf_host }}
+      host: {{ $rf_host | quote }}
+      {{ else if .host }}
+      host: {{ .host | quote }}
+      {{ end }}
+  {{- end }}
+{{- end }}
+---
+{{- if .Values.ingress.http.enabled -}}
+{{- $fullName := include "rfapi.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+{{- $rf_host := .Values.global.rf_app_host }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}-http
+  labels:
+    {{- include "rfapi.labels" . | nindent 4 }}
+  {{- with .Values.ingress.http.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  ingressClassName: {{ default .Values.ingress.http.className .Values.global.ingressClassName }}
+  {{- if .Values.ingress.http.tls }}
+  tls:
+    {{- range .Values.ingress.http.tls }}
+    - hosts:
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
+  rules:
+  {{- range .Values.ingress.http.hosts }}
+    - http:
+        paths:
+        {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
+            backend:
+              service:
+                name: {{ $fullName }}
+                port:
+                  number: {{ $svcPort }}
+        {{- end }}
+      {{ if $rf_host }}
+      host: {{ $rf_host | quote }}
+      {{ else if .host }}
+      host: {{ .host | quote }}
+      {{ end }}
+  {{- end }}
+{{- end }}
