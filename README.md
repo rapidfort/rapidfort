@@ -123,8 +123,9 @@ For more information, please refer to the [RapidFort user documentation](https:/
 
 | Name                            | Description                                                                                 | Value           | Required |
 | ------------------------------- | ------------------------------------------------------------------------------------------- | --------------- | -------- |
-| `secret.aws_access_key_id`                        | AWS credentials with Read/List/Write permissions for the RapidFort S3 bucket                | `""`            | `true`   |
-| `secret.aws_secret_access_key`                    | AWS credentials with Read/List/Write permissions for the RapidFort S3 bucket                | `""`            | `true`   |
+| `secret.aws_access_key_id`                        | AWS credentials with Read/List/Write permissions for the RapidFort S3 bucket                | `""`            | `false`   |
+| `secret.aws_secret_access_key`                    | AWS credentials with Read/List/Write permissions for the RapidFort S3 bucket                | `""`            | `false`   |
+| `secret.aws_secret_access_key`                    | AWS IAM Role with Read/List/Write permissions for the RapidFort S3 bucket                | `""`            | `false`   |
 | `secret.aws_default_region`                       | AWS region                                                                | `""`            | `true`   |
 | `secret.s3_bucket`                                | AWS S3 bucket for Rapidfort data                                     | `""`            | `true`   |
 | `secret.rf_app_admin`                             | RapidFort application admin email address                                 | `""`            | `true`   |
