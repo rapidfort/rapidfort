@@ -1,7 +1,41 @@
+#############################################################################################################################
+# RapidFort Helm Based Deployment
+#
+# Requirements:
+# -------------
+# 1.  Follow the instructions given at https://docs.rapidfort.com/rapidfort-on-premises/rapidfort-aws-prerequisites
+# 2.  Below are the required parameters:
+#     a.  AWS Region (aws_role_arn)
+#     b.  AWS S3 Bucket (s3_bucket)
+#     b.  RapidFort App Admin Email. (rf_app_admin)
+#     b.  RapidFort App Admin Password. (rf_app_admin_passwd)
+#     b.  RapidFort App Host. (rf_app_host)
+#     b.  Either of the below is required to connect to AWS S3 Bucket.
+#         i.  Preference 1 - AWS Access Key (aws_access_key_id) and AWS Secret Access Key (aws_secret_access_key).
+#             Here is the output of the values-override.yaml
+#             secret:
+#               aws_access_key_id: "<aws access key id>"
+#               aws_secret_access_key: "<aws secret access key>"
+#               aws_default_region: "<aws region name>"
+#               s3_bucket: "<s3 bucket name>"
+#               rf_app_admin: "<app admin email>"
+#               rf_app_admin_passwd: "<app admin email password>"
+#               rf_app_host: "<HOST FQDN>"
+#         ii. Preference 2 - AWS Role ARN (aws_role_arn) is required.
+#             secret:
+#               aws_role_arn: "<aws role arn>"
+#               aws_default_region: "<aws region name>"
+#               s3_bucket: "<s3 bucket name>"
+#               rf_app_admin: "<app admin email>"
+#               rf_app_admin_passwd: "<app admin email password>"
+#               rf_app_host: "<HOST FQDN>"
+#############################################################################################################################
+
 secret:
   aws_access_key_id: ""
   aws_secret_access_key: ""
   aws_default_region: ""
+  aws_role_arn: ""
   s3_bucket: ""
   rf_app_admin: ""
   rf_app_admin_passwd: ""
