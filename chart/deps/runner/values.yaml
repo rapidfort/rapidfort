@@ -104,9 +104,15 @@ volumes:
   - name: dockersock
     hostPath:
       path: /var/run/docker.sock
+  - name: docker-tmp
+    hostPath:
+      path: /tmp
+
 volumeMounts:
   - name: dockersock
     mountPath: "/var/run/docker.sock"
+  - name: docker-tmp
+    mountPath: "/tmp"
 
 livenessProbe:
   periodSeconds: 30

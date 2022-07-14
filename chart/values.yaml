@@ -20,50 +20,50 @@ aggregator:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/aggregator-exe"
-    tag: "1.1.11-rfhardened"
+    tag: "1.1.15-rfhardened"
 
 backend:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/backend-exe"
-    tag: "1.1.11-rfhardened"
+    tag: "1.1.15-rfhardened"
 
 frontrow:
   enabled: true
   authUrl: ""
   image:
     repository: "public.ecr.aws/rapidfort/frontrow"
-    tag: "1.1.11-rfhardened"
+    tag: "1.1.15-rfhardened"
 
 iso-master:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/iso-master-exe"
-    tag: "1.1.11-rfhardened"
+    tag: "1.1.15-rfhardened"
 
 rf-scan:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/rf-scan-exe"
-    tag: "1.1.11-rfhardened"
+    tag: "1.1.15-rfhardened"
 
 rfapi:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/rfapi-exe"
-    tag: "1.1.11-rfhardened"
+    tag: "1.1.15-rfhardened"
 
 rfpubsub:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/rfpubsub-exe"
-    tag: "1.1.11-rfhardened"
+    tag: "1.1.15-rfhardened"
 
 runner:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/runner"
-    tag: "1.1.11-rfhardened"
+    tag: "1.1.15-rfhardened"
 
 keycloak:
   enabled: true
