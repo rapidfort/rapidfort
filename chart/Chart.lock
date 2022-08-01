@@ -36,4 +36,4 @@ dependencies:
   repository: file://deps/fluent-bit/
   version: 1.1.0
 digest: sha256:1c23170311b437cc19b83394e86a40b23b9e7ae8b69504889bdb8e89a230b84e
-generated: "2022-07-20T10:23:04.262913312-07:00"
+generated: "2022-08-01T12:59:04.136417946-07:00"
