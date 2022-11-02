@@ -131,7 +131,7 @@ For more information, please refer to the [RapidFort user documentation](https:/
 | `secret.rf_app_admin`                             | RapidFort application admin email address                                 | `""`            | `true`   |
 | `secret.rf_app_admin_passwd`                      | RapidFort application admin password             | `""`            | `true`   |
 | `secret.rf_app_host`                              | Public RapidFort service endpoint (FQDN or IP)   | `""`            | `true`   |
-
+| `secret.storage_type`                              | RapidFort Data Storage Type (s3, ls, gs)   | `""`            | `true`   |
 ## Ingress
 ### NGINX Ingress Controller
 Create an [NGINX Ingress Controller](https://github.com/kubernetes/ingress-nginx/blob/main/docs/deploy/index.md) deployment using the sample YAML code.
