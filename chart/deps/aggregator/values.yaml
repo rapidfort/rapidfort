@@ -70,10 +70,12 @@ env:
 secret:
   name: "rf-secret"
   keys:
+    - RF_S3_BUCKET
+    - RF_STORAGE_TYPE
     - AWS_ACCESS_KEY_ID
     - AWS_DEFAULT_REGION
     - AWS_SECRET_ACCESS_KEY
-    - RF_S3_BUCKET
+    - RF_GS_CREDS
     - RF_ROLE_ARN
     - RF_APP_HOST
     - DEPLOY_MODE

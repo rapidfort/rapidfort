@@ -29,22 +29,12 @@ spec:
       {{ tpl (toYaml (index .Values.extraVolumes )) . | nindent 6 }}
       {{ end }}
       initContainers:
-        - name: volume-permissions
-          image: public.ecr.aws/w9i9p8n5/init:1.1.10
-          command:
-          - /bin/bash
-          - -c
-          - chmod 777 /opt/rapidfort/backend/app/imgs_work_dir
-          volumeMounts:
-            {{ if .Values.volumeMounts }}
-            {{ tpl (toYaml (index .Values.volumeMounts )) . | nindent 12 }}
-            {{ end }}
         - name: init
-          image: public.ecr.aws/w9i9p8n5/init:1.1.10
+          image: public.ecr.aws/rapidfort/init:1.1.10
           command:
             - "/bin/bash"
             - "-c"
-            - "until [ $(curl --connect-timeout 10 -sw '%{http_code}' http://{{ .Values.keycloak.serviceName }} -o /dev/null) -eq 200 ]; do echo keycloak not ready; sleep 1; done"
+            - "until [ $(curl --connect-timeout 1 -sw '%{http_code}' http://{{ .Values.keycloak.serviceName }} -o /dev/null) -eq 200 ]; do echo keycloak not ready; sleep 1; done"
       containers:
         - name: {{ .Chart.Name }}
           securityContext:

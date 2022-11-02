@@ -70,15 +70,15 @@ spec:
             httpGet:
               path: /
               port: http
-            initialDelaySeconds: 40
-            failureThreshold: 5
-            periodSeconds: 10
+            initialDelaySeconds: 5 
+            failureThreshold: 99
+            periodSeconds: 99
           startupProbe:
             httpGet:
               path: /
               port: http
             periodSeconds: 5
-            failureThreshold: 50
+            failureThreshold: 99
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

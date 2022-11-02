@@ -96,18 +96,17 @@ secret:
     - AWS_DEFAULT_REGION
     - DB_URL
     - RF_S3_BUCKET
+    - RF_STORAGE_TYPE
+    - AWS_ACCESS_KEY_ID
+    - AWS_SECRET_ACCESS_KEY
+    - RF_ROLE_ARN
+    - RF_GS_CREDS
     - KEYCLOAK_JWT_PUB_KEY
     - KEYCLOAK_REALM
     - KEYCLOAK_CLIENT_ID
     - KEYCLOAK_SERVICE_ACCOUNT_CLIENT_ID
     - KEYCLOAK_SERVICE_ACCOUNT_CLIENT_SECRET
-    - ADMIN_ROLE_ID
-    - MEMBER_ROLE_ID
-    - GUEST_ROLE_ID
     - RF_APP_HOST
-    - AWS_ACCESS_KEY_ID
-    - AWS_SECRET_ACCESS_KEY
-    - RF_ROLE_ARN
     - DEPLOY_MODE
     - RF_VERBOSE
 
@@ -118,9 +117,6 @@ volumes:
   - name: image-db
     hostPath:
       path: /opt/rapidfort/data/shared/image_db
-  - name: dockersock
-    hostPath:
-      path: /var/run/docker.sock
   - name: local-bucket
     hostPath:
       path: /opt/rapidfort/local-bucket/
@@ -130,8 +126,6 @@ volumeMounts:
     mountPath: "/opt/rapidfort/iso-master/app/imgs_work_dir"
   - name: image-db
     mountPath: "/opt/rapidfort/iso-master/app/image_db"
-  - name: dockersock
-    mountPath: "/var/run/docker.sock"
   - name: local-bucket
     mountPath: "/opt/rapidfort/local-bucket"
 

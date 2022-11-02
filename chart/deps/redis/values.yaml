@@ -78,3 +78,21 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+volumes:
+  - name: redis-data
+    hostPath:
+      path: /opt/rapidfort/data/shared/redis
+  - name: config-volume    
+    configMap:
+      name: redis-config
+volumeMounts:
+  - name: redis-data
+    mountPath: "/bitnami/redis/data/"
+  - mountPath: "/opt/bitnami/redis/mounted-etc/"
+    name: config-volume
+
+redis_config:
+  enabled: true
+  maxmemory: 2048mb # in bytes
+  maxmemory_policy: allkeys-lru

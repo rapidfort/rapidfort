@@ -1,11 +1,12 @@
-{{- if .Values.authUrl }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: keycloak-config
+  name: frontrow-config
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "frontrow.selectorLabels" . | nindent 4 }}
 data:
-  {{ (tpl (.Files.Glob "config_map/*.json").AsConfig $ ) | nindent 2 }}
-{{- end }}
+  {{ (tpl (.Files.Glob "config_map/env.json").AsConfig $ ) | nindent 2 }}
+  {{- if .Values.authUrl }}
+  {{ (tpl (.Files.Glob "config_map/keycloak.json").AsConfig $ ) | nindent 2 }}
+  {{- end }}
