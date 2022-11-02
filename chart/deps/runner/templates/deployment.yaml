@@ -83,6 +83,8 @@ spec:
               value: "{{ .Values.env.redis_pwd }}"
             - name: RF_INTERNAL
               value: "1"                    
+            - name: RF_CLI_CONTAINER_ENGINE
+              value: "podman" 
           volumeMounts:
             {{ if .Values.volumeMounts }}
             {{ tpl (toYaml (index .Values.volumeMounts )) . | nindent 12 }}
