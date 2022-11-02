@@ -34,9 +34,15 @@ spec:
       {{ if .Values.volumes }}
       {{ tpl (toYaml (index .Values.volumes )) . | nindent 6 }}
       {{ end }}
+      #mount docker.sock only if container engine is docker
+      {{- if eq .Values.global.container_engine "docker" }}
+      - name: dockersock
+        hostPath:
+          path: /var/run/docker.sock
+      {{- end }}       
       initContainers:
         - name: volume-permissions
-          image: public.ecr.aws/w9i9p8n5/init:1.1.10
+          image: public.ecr.aws/rapidfort/init:1.1.10
           command:
           - /bin/bash
           - -c
@@ -45,6 +51,12 @@ spec:
             {{ if .Values.volumeMounts }}
             {{ tpl (toYaml (index .Values.volumeMounts )) . | nindent 12 }}
             {{ end }}       
+        - name: init
+          image: public.ecr.aws/rapidfort/init:1.1.10
+          command:
+            - "/bin/bash"
+            - "-c"
+            - "until [ $(curl --connect-timeout 1 -sw '%{http_code}' http://backend -o /dev/null) -eq 200 ]; do echo backend not ready; sleep 1; done"
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -132,6 +144,11 @@ spec:
             {{ if .Values.volumeMounts }}
             {{ tpl (toYaml (index .Values.volumeMounts )) . | nindent 12 }}
             {{ end }}
+            #mount docker.sock only if container engine is docker
+            {{- if eq .Values.global.container_engine "docker" }}
+            - name: dockersock
+              mountPath: "/var/run/docker.sock"
+            {{- end }}            
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

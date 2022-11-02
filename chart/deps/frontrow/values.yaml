@@ -3,6 +3,7 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
+environment: staging
 
 image:
   repository: 274057717848.dkr.ecr.us-east-1.amazonaws.com/frontrow
@@ -106,3 +107,13 @@ probeCommand:
   httpGet:
     path: /
     port: frontrow-http
+
+volumes:
+  - configMap:
+      defaultMode: 420
+      name: frontrow-config
+    name: config-env
+volumeMounts:
+  - mountPath: "/usr/share/nginx/html/app/data/env.json"
+    name: config-env
+    subPath: "env.json"

@@ -3,6 +3,7 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
+allowed_rf_host: api.rapidfort.com
 
 image:
   repository: 274057717848.dkr.ecr.us-east-1.amazonaws.com/backend
@@ -82,22 +83,20 @@ secret:
     - USERNAME_SMTP
     - PASSWORD_SMTP
     - SOURCE_ARN
+    - RF_S3_BUCKET
+    - RF_STORAGE_TYPE
     - AWS_ACCESS_KEY_ID
     - AWS_DEFAULT_REGION
     - AWS_SECRET_ACCESS_KEY
+    - RF_ROLE_ARN
+    - RF_GS_CREDS
     - DB_URL
     - KEYCLOAK_JWT_PUB_KEY
     - KEYCLOAK_REALM
     - KEYCLOAK_CLIENT_ID
     - KEYCLOAK_SERVICE_ACCOUNT_CLIENT_ID
     - KEYCLOAK_SERVICE_ACCOUNT_CLIENT_SECRET
-    - ADMIN_ROLE_ID
-    - MEMBER_ROLE_ID
-    - GUEST_ROLE_ID
-    - SUPER_ADMIN_ROLE_ID
     - RF_APP_HOST
-    - RF_S3_BUCKET
-    - RF_ROLE_ARN
     - DEPLOY_MODE    
     - RF_APP_ADMIN
     - RF_APP_ADMIN_PASSWD
@@ -114,27 +113,22 @@ container:
   extra_options: {}
 
 volumes:
-  - name: imgs-work-dir
-    hostPath:
-      path: /opt/rapidfort/data/shared/imgs_work_dir
   - name: local-bucket
     hostPath:
       path: /opt/rapidfort/local-bucket/
 volumeMounts:
-  - name: imgs-work-dir
-    mountPath: "/opt/rapidfort/backend/app/imgs_work_dir"
   - name: local-bucket
     mountPath: "/opt/rapidfort/local-bucket"
 
 livenessProbe:
   periodSeconds: 30
   initialDelaySeconds: 15
-  timeoutSeconds: 10
+  timeoutSeconds: 99
 
 readinessProbe:
   periodSeconds: 30
   initialDelaySeconds: 15
-  timeoutSeconds: 10 
+  timeoutSeconds: 99
 
 probeCommand:
  httpGet:

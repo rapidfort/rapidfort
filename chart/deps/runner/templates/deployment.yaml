@@ -59,6 +59,10 @@ spec:
             - name: RF_ROLE_ARN
               value: "{{ .Values.env.rf_role_arn }}"
             {{ end }}
+            {{ if .Values.env.rfvdb_host }}
+            - name: RFVDB_HOST
+              value: "{{ .Values.env.rfvdb_host }}"
+            {{ end }}
             - name: RUNNER_APP_PORT
               value: "{{ .Values.service.container_port }}"
             - name: RF_DEBUG
@@ -77,6 +81,8 @@ spec:
               value: "{{ .Values.env.redis_port }}"
             - name: RF_REDIS_PWD
               value: "{{ .Values.env.redis_pwd }}"
+            - name: RF_INTERNAL
+              value: "1"                    
           volumeMounts:
             {{ if .Values.volumeMounts }}
             {{ tpl (toYaml (index .Values.volumeMounts )) . | nindent 12 }}

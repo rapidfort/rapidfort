@@ -36,7 +36,7 @@ spec:
             name: mysql-initdb-config
       initContainers:
         - name: volume-permissions
-          image: public.ecr.aws/w9i9p8n5/init:1.1.10
+          image: public.ecr.aws/rapidfort/init:1.1.10
           command:
           - /bin/bash
           - -c
@@ -75,10 +75,10 @@ spec:
                 - "--password=RF-123579"
                 - "-e"
                 - "SHOW DATABASES;"
-            failureThreshold: 10
-            periodSeconds: 10
+            failureThreshold: 99
+            periodSeconds: 99
             successThreshold: 1
-            timeoutSeconds: 60
+            timeoutSeconds: 99
           readinessProbe:
             exec:
               command:
@@ -88,8 +88,8 @@ spec:
                 - "--password=RF-123579"
                 - "-e"
                 - "SHOW DATABASES;"
-            initialDelaySeconds: 5
-            periodSeconds: 10
+            initialDelaySeconds: 4
+            periodSeconds: 99
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

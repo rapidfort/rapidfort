@@ -28,9 +28,20 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       volumes:
-        - name: redis-data
-          hostPath:
-            path: /opt/rapidfort/data/shared/redis
+      {{ if .Values.volumes }}
+      {{ tpl (toYaml (index .Values.volumes )) . | nindent 6 }}
+      {{ end }}
+      initContainers:
+        - name: volume-permissions
+          image: public.ecr.aws/rapidfort/init:1.1.10
+          command:
+          - /bin/bash
+          - -c
+          - chmod 777 /bitnami/redis/data/
+          volumeMounts:
+          {{ if .Values.volumeMounts }}
+          {{ tpl (toYaml (index .Values.volumeMounts )) . | nindent 12 }}
+          {{ end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -45,25 +56,26 @@ spec:
               containerPort: 6379
               protocol: TCP
           volumeMounts:
-            - name: redis-data
-              mountPath: "/data"
+          {{ if .Values.volumeMounts }}
+          {{ tpl (toYaml (index .Values.volumeMounts )) . | nindent 12 }}
+          {{ end }}
           livenessProbe:
             exec:
               command:
               - redis-cli
               - ping
-            initialDelaySeconds: 5
-            failureThreshold: 5
-            timeoutSeconds: 5
-            periodSeconds: 3
+            initialDelaySeconds: 4
+            failureThreshold: 99
+            timeoutSeconds: 99
+            periodSeconds: 99
           readinessProbe:
             exec:
               command:
               - redis-cli
               - ping
-            initialDelaySeconds: 5
-            timeoutSeconds: 5
-            periodSeconds: 3
+            initialDelaySeconds: 4
+            timeoutSeconds: 99
+            periodSeconds: 99
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
