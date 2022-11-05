@@ -9,6 +9,7 @@ secret:
 
 global:
   rf_app_host: "" # This field is used to update the host name in the ingress.
+  container_engine: "podman"
 
 sc:
   enabled: false
@@ -20,50 +21,50 @@ aggregator:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/aggregator-exe"
-    tag: "1.1.20-rfhardened"
+    tag: "1.1.21-rfhardened"
 
 backend:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/backend-exe"
-    tag: "1.1.20-rfhardened"
+    tag: "1.1.21-rfhardened"
 
 frontrow:
   enabled: true
   authUrl: ""
   image:
     repository: "public.ecr.aws/rapidfort/frontrow"
-    tag: "1.1.20-rfhardened"
+    tag: "1.1.21-rfhardened"
 
 iso-master:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/iso-master-exe"
-    tag: "1.1.20-rfhardened"
+    tag: "1.1.21-rfhardened"
 
 rf-scan:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/rf-scan-exe"
-    tag: "1.1.20-rfhardened"
+    tag: "1.1.21-rfhardened"
 
 rfapi:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/rfapi-exe"
-    tag: "1.1.20-rfhardened"
+    tag: "1.1.21-rfhardened"
 
 rfpubsub:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/rfpubsub-exe"
-    tag: "1.1.20-rfhardened"
+    tag: "1.1.21-rfhardened"
 
 runner:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/runner"
-    tag: "1.1.20-rfhardened"
+    tag: "1.1.21-rfhardened"
 
 keycloak:
   enabled: true

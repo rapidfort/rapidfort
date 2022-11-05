@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "mysql.fullname" . }}
   labels:
@@ -11,6 +11,7 @@ spec:
   selector:
     matchLabels:
       {{- include "mysql.selectorLabels" . | nindent 6 }}
+  serviceName: {{ include "mysql.fullname" . }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -43,7 +44,7 @@ spec:
           - chmod 777 /bitnami/mysql
           volumeMounts:
             - name: mysql-data
-              mountPath: "/bitnami/mysql"         
+              mountPath: "/bitnami/mysql"
       containers:
         - name: {{ .Chart.Name }}
           securityContext:

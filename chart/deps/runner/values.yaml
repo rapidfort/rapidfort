@@ -102,12 +102,17 @@ env:
   rfvdb_host: "frontrow.rapidfort.com"
 
 volumes:
-  - name: tmp
+  - name: dockersock
+    hostPath:
+      path: /var/run/docker.sock
+  - name: docker-tmp
     hostPath:
       path: /tmp
 
 volumeMounts:
-  - name: tmp
+  - name: dockersock
+    mountPath: "/var/run/docker.sock"
+  - name: docker-tmp
     mountPath: "/tmp"
 
 livenessProbe:

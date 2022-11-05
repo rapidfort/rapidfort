@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "redis.fullname" . }}
   labels:
@@ -11,6 +11,7 @@ spec:
   selector:
     matchLabels:
       {{- include "redis.selectorLabels" . | nindent 6 }}
+  serviceName: {{ include "redis.fullname" . }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
