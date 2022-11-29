@@ -108,10 +108,10 @@ pvc:
 
 #TODO: use this in template.
 livenessProbe:
-  periodSeconds: 30
-  initialDelaySeconds: 15
-  timeoutSeconds: 10
-  failureThreshold: 1
+  periodSeconds: 10
+  initialDelaySeconds: 10
+  timeoutSeconds: 60
+  failureThreshold: 10
 
 probeCommand:  
   httpGet:
@@ -119,10 +119,10 @@ probeCommand:
     port: isomaster-http
 
 readinessProbe:
-  periodSeconds: 30
-  initialDelaySeconds: 15
-  timeoutSeconds: 10
-  failureThreshold: 1
+  periodSeconds: 10
+  initialDelaySeconds: 10
+  timeoutSeconds: 60
+  failureThreshold: 10
 
 keycloak:
   serviceName: keycloak-http
