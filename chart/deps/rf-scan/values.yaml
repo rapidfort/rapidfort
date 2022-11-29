@@ -133,16 +133,16 @@ container:
   extra_options: {}
 
 livenessProbe:
-  periodSeconds: 30
-  initialDelaySeconds: 15
-  timeoutSeconds: 10
-  failureThreshold: 1
+  periodSeconds: 10
+  initialDelaySeconds: 10
+  timeoutSeconds: 60
+  failureThreshold: 10
 
 readinessProbe:
-  periodSeconds: 30
-  initialDelaySeconds: 15
-  timeoutSeconds: 10
-  failureThreshold: 1
+  periodSeconds: 10
+  initialDelaySeconds: 10
+  timeoutSeconds: 60
+  failureThreshold: 10
   
 probeCommand:
   httpGet:
