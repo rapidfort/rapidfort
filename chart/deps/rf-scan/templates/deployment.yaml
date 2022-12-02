@@ -41,18 +41,14 @@ spec:
           path: /var/run/docker.sock
       {{- end }}       
       initContainers:
-        - name: volume-permissions
-          image: public.ecr.aws/rapidfort/init:1.1.10
+        - name: init-vulns
+          image: public.ecr.aws/rapidfort/init
           command:
-          - /bin/bash
-          - -c
-          - chmod 777 /opt/rapidfort/iso-master/app/imgs_work_dir
-          volumeMounts:
-            {{ if .Values.volumeMounts }}
-            {{ tpl (toYaml (index .Values.volumeMounts )) . | nindent 12 }}
-            {{ end }}       
-        - name: init
-          image: public.ecr.aws/rapidfort/init:1.1.10
+            - "/bin/bash"
+            - "-c"
+            - "until [ $(curl --connect-timeout 1 -sw '%{http_code}' http://vulns-db/vulns-db/api/v1/vulnsdb -o /dev/null) -eq 200 ]; do echo vulns-db not ready; sleep 1; done"
+        - name: init-backend
+          image: public.ecr.aws/rapidfort/init
           command:
             - "/bin/bash"
             - "-c"
@@ -70,6 +66,12 @@ spec:
             - name: rf-scan-http
               containerPort: {{ .Values.service.container_port }}
               protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /
+              port: rf-scan-http
+            failureThreshold: 120
+            periodSeconds: 2
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
             {{- toYaml .Values.probeCommand | nindent 12 }}

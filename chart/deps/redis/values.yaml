@@ -95,4 +95,4 @@ volumeMounts:
 redis_config:
   enabled: true
   maxmemory: 2048mb # in bytes
-  maxmemory_policy: allkeys-lru
+  maxmemory_policy: noeviction

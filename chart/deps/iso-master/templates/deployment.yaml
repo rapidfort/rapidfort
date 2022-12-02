@@ -35,8 +35,14 @@ spec:
           path: /var/run/docker.sock
       {{- end }}      
       initContainers:
-        - name: init
-          image: public.ecr.aws/rapidfort/init:1.1.10
+        - name: init-vulns
+          image: public.ecr.aws/rapidfort/init
+          command:
+            - "/bin/bash"
+            - "-c"
+            - "until [ $(curl --connect-timeout 1 -sw '%{http_code}' http://vulns-db/vulns-db/api/v1/vulnsdb -o /dev/null) -eq 200 ]; do echo backend not ready; sleep 1; done"
+        - name: init-backend
+          image: public.ecr.aws/rapidfort/init
           command:
             - "/bin/bash"
             - "-c"
@@ -54,6 +60,12 @@ spec:
             - name: isomaster-http
               containerPort: {{ .Values.service.container_port }}
               protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /
+              port: isomaster-http
+            failureThreshold: 120
+            periodSeconds: 2
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
             {{- toYaml .Values.probeCommand | nindent 12 }}
