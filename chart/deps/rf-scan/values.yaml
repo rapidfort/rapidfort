@@ -111,21 +111,11 @@ secret:
     - RF_VERBOSE
 
 volumes:
-  - name: imgs-work-dir
-    hostPath:
-      path: /opt/rapidfort/data/shared/imgs_work_dir
-  - name: image-db
-    hostPath:
-      path: /opt/rapidfort/data/shared/image_db
   - name: local-bucket
     hostPath:
       path: /opt/rapidfort/local-bucket/
 
 volumeMounts:
-  - name: imgs-work-dir
-    mountPath: "/opt/rapidfort/iso-master/app/imgs_work_dir"
-  - name: image-db
-    mountPath: "/opt/rapidfort/iso-master/app/image_db"
   - name: local-bucket
     mountPath: "/opt/rapidfort/local-bucket"
 
@@ -134,15 +124,15 @@ container:
 
 livenessProbe:
   periodSeconds: 10
-  initialDelaySeconds: 10
-  timeoutSeconds: 60
-  failureThreshold: 10
+  initialDelaySeconds: 5
+  timeoutSeconds: 99
+  failureThreshold: 77
 
 readinessProbe:
   periodSeconds: 10
-  initialDelaySeconds: 10
-  timeoutSeconds: 60
-  failureThreshold: 10
+  initialDelaySeconds: 5
+  timeoutSeconds: 99
+  failureThreshold: 77
   
 probeCommand:
   httpGet:

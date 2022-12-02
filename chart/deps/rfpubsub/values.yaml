@@ -118,9 +118,10 @@ container:
   extra_options: {}
 
 livenessProbe:
+  failureThreshold: 8
   periodSeconds: 30
   initialDelaySeconds: 15
-  timeoutSeconds: 10
+  timeoutSeconds: 60
 
 probeCommand:  
   exec:
@@ -131,5 +132,5 @@ probeCommand:
 
 readinessProbe:
   periodSeconds: 30
-  initialDelaySeconds: 15
+  initialDelaySeconds: 5
   timeoutSeconds: 10 

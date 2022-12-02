@@ -5,12 +5,10 @@ secret:
   s3_bucket: ""
   rf_app_admin: ""
   rf_app_admin_passwd: ""
-  storage_type: ""
   rf_app_host: "" # This field is used to provide the rapidfort service FQDN (if FQDN is not available use IP ADDRESS) to internal service
 
 global:
   rf_app_host: "" # This field is used to update the host name in the ingress.
-  container_engine: "docker"
 
 sc:
   enabled: false
@@ -22,50 +20,50 @@ aggregator:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/aggregator-exe"
-    tag: "1.1.22-rfhardened"
+    tag: "1.1.23-ib-rfhardened"
 
 backend:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/backend-exe"
-    tag: "1.1.22-rfhardened"
+    tag: "1.1.23-ib-rfhardened"
 
 frontrow:
   enabled: true
   authUrl: ""
   image:
     repository: "public.ecr.aws/rapidfort/frontrow"
-    tag: "1.1.22-rfhardened"
+    tag: "1.1.23-ib-rfhardened"
 
 iso-master:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/iso-master-exe"
-    tag: "1.1.22-rfhardened"
+    tag: "1.1.23-ib-rfhardened"
 
 rf-scan:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/rf-scan-exe"
-    tag: "1.1.22-rfhardened"
+    tag: "1.1.23-ib-rfhardened"
 
 rfapi:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/rfapi-exe"
-    tag: "1.1.22-rfhardened"
+    tag: "1.1.23-ib-rfhardened"
 
 rfpubsub:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/rfpubsub-exe"
-    tag: "1.1.22-rfhardened"
+    tag: "1.1.23-ib-rfhardened"
 
 runner:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/runner"
-    tag: "1.1.22-rfhardened"
+    tag: "1.1.23-ib-rfhardened"
 
 keycloak:
   enabled: true
