@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "rfapi.fullname" . }}
+  name: {{ include "vulns-db.fullname" . }}
   labels:
-    {{- include "rfapi.labels" . | nindent 4 }}
+    {{- include "vulns-db.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "rfapi.selectorLabels" . | nindent 6 }}
+      {{- include "vulns-db.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -18,68 +18,62 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "rfapi.selectorLabels" . | nindent 8 }}
+        {{- include "vulns-db.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      volumes:
-      {{ if .Values.volumes }}
-      {{ tpl (toYaml (index .Values.volumes )) . | nindent 6 }}
-      {{ end }}
-      {{ if .Values.extraVolumes }}
-      {{ tpl (toYaml (index .Values.extraVolumes )) . | nindent 6 }}
-      {{ end }}
-      serviceAccountName: {{ include "rfapi.serviceAccountName" . }}
+      serviceAccountName: {{ include "vulns-db.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      initContainers:
-        - name: init
-          image: public.ecr.aws/rapidfort/init
-          command:
-            - "/bin/bash"
-            - "-c"
-            - "until [ $(redis-cli -h {{ .Values.env.redis_host }} -p {{ .Values.env.redis_port }} ping) == 'PONG' ]; do echo redis not ready; sleep 1; done"
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{ if .Values.container.extra_options }}
-          {{- toYaml .Values.container.extra_options | nindent 10 }}
-          {{ end }}          
-          ports:
-            - name: rfapi-http
-              containerPort: {{ .Values.service.container_port }}
-              protocol: TCP
-          volumeMounts:
-            {{ if .Values.volumeMounts }}
-            {{ tpl (toYaml (index .Values.volumeMounts )) . | nindent 12 }}
-            {{ end }}
-            {{ if .Values.extraVolumeMounts }}
-            {{ tpl (toYaml (index .Values.extraVolumeMounts )) . | nindent 12 }}
-            {{ end }}      
           env:
             - name: LC_ALL
               value: "en_US.UTF-8"          
-            - name: RF_API_PORT
-              value: "{{ .Values.service.container_port }}"
-            - name: "RF_DEBUG"
+            - name: DEPLOY_MODE
+              value: "STANDALONE"
+            - name: RF_DEBUG
               value: "{{ .Values.env.rf_debug }}"
+            - name: RF_REDIS_HOST_NAME_HA
+              value: "{{ .Values.env.redis_host_ha }}"
+            - name: RF_REDIS_PORT_HA
+              value: "{{ .Values.env.redis_port_ha }}"
+            - name: RF_REDIS_PWD_HA
+              value: "{{ .Values.env.redis_pwd_ha }}"
+            - name: RF_REDIS_DB_HA
+              value: "{{ .Values.env.redis_db_ha }}"
             - name: RF_REDIS_HOST_NAME
               value: "{{ .Values.env.redis_host }}"
             - name: RF_REDIS_PORT
               value: "{{ .Values.env.redis_port }}"
             - name: RF_REDIS_PWD
               value: "{{ .Values.env.redis_pwd }}"
+            {{ if .Values.env.rfvdb_host }}
+            - name: RFVDB_HOST
+              value: "{{ .Values.env.rfvdb_host }}"
+            {{ end }}
+          ports:
+            - name: vulns-db-http
+              containerPort: {{ .Values.service.container_port }}
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /
+              port: vulns-db-http
+            failureThreshold: 120
+            periodSeconds: 2
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
             {{- toYaml .Values.probeCommand | nindent 12 }}
           readinessProbe:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
-            {{- toYaml .Values.probeCommand | nindent 12 }}
+            {{- toYaml .Values.probeCommand | nindent 12 }}           
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
@@ -94,3 +88,10 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      initContainers:
+      - name: init
+        image: "{{ .Values.initContainer.image.repository }}:{{ .Values.initContainer.image.tag | default .Chart.AppVersion }}"
+        command:
+          - "/bin/bash"
+          - "-c"
+          - "while timeout 1 nc -vz {{ .Values.env.redis_host }} {{ .Values.env.redis_port }} > /dev/null 2>&1; [ $? -ne 0 ]; do echo $(date +%s) waiting redis; done"

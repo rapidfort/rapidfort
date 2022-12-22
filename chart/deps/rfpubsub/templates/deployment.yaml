@@ -44,6 +44,8 @@ spec:
           {{- toYaml .Values.container.extra_options | nindent 10 }}
           {{ end }}                  
           env:
+            - name: LC_ALL
+              value: "en_US.UTF-8"          
             - name: RFPUBSUB_WS_PORT
               value: "{{ .Values.service.container_port }}"
             - name: RF_REDIS_HOST_NAME_HA

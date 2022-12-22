@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "vulns-db.fullname" . }}
+  labels:
+    {{- include "vulns-db.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: vulns-db-http 
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "vulns-db.selectorLabels" . | nindent 4 }}

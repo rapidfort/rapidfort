@@ -35,5 +35,8 @@ dependencies:
 - name: fluent-bit
   repository: file://deps/fluent-bit/
   version: 1.1.0
-digest: sha256:1c23170311b437cc19b83394e86a40b23b9e7ae8b69504889bdb8e89a230b84e
-generated: "2022-12-01T17:29:57.134266621-08:00"
+- name: vulns-db
+  repository: file://deps/vulns-db/
+  version: 1.1.0
+digest: sha256:7218b8dcd8d69e52e248d036b6061327cb8ebed4b5f4dab2b3e8b8a2c48853a0
+generated: "2022-12-22T05:04:37.256811528-08:00"

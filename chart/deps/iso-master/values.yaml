@@ -102,10 +102,6 @@ affinity: {}
 
 nodeSelector: {}
 
-pvc:
-  image_db: ""
-  package_analyzer_db: ""
-
 #TODO: use this in template.
 livenessProbe:
   periodSeconds: 10 
@@ -147,10 +143,6 @@ secret:
     - DEPLOY_MODE
     - RF_VERBOSE
 
-pvc:
-  image_db: ""
-  package_analyzer_db: ""
-
 volumes:
   - name: imgs-work-dir
     hostPath:
@@ -172,3 +164,17 @@ volumeMounts:
 
 container:
   extra_options: {}
+
+init_containers:
+  - name: init-vulns
+    image: public.ecr.aws/rapidfort/init
+    command:
+      - "/bin/bash"
+      - "-c"
+      - "until [ $(curl --connect-timeout 1 -sw '%{http_code}' http://vulns-db/vulns-db/api/v1/vulnsdb -o /dev/null) -eq 200 ]; do echo vulns-db not ready; sleep 1; done"
+  - name: init-backend
+    image: public.ecr.aws/rapidfort/init
+    command:
+      - "/bin/bash"
+      - "-c"
+      - "until [ $(curl --connect-timeout 1 -sw '%{http_code}' http://backend -o /dev/null) -eq 200 ]; do echo backend not ready; sleep 1; done"
