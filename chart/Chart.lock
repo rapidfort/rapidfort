@@ -39,4 +39,4 @@ dependencies:
   repository: file://deps/vulns-db/
   version: 1.1.0
 digest: sha256:7218b8dcd8d69e52e248d036b6061327cb8ebed4b5f4dab2b3e8b8a2c48853a0
-generated: "2022-12-22T08:58:12.437572714-08:00"
+generated: "2022-12-22T14:09:09.613074489-08:00"
