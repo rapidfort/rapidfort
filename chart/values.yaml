@@ -71,7 +71,7 @@ vulns-db:
     repository: "public.ecr.aws/rapidfort/vulns-db"
     tag: "1.1.24-rfhardened"
   env:
-    rfvdb_host: "frontrow.rapidfort.com"
+    rfvdb_host: "api.rapidfort.com"
 
 keycloak:
   enabled: true
