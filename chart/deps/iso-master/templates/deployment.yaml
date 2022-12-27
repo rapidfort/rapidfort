@@ -22,12 +22,12 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       volumes:
-      {{ if .Values.volumes }}
+      {{- if .Values.volumes }}
       {{ tpl (toYaml (index .Values.volumes )) . | nindent 6 }}
-      {{ end }}
-      {{ if .Values.extraVolumes }}
+      {{- end }}
+      {{- if .Values.extraVolumes }}
       {{ tpl (toYaml (index .Values.extraVolumes )) . | nindent 6 }}
-      {{ end }}
+      {{- end }}
       #mount docker.sock only if container engine is docker
       {{- if eq .Values.global.container_engine "docker" }}
       - name: dockersock
@@ -35,27 +35,18 @@ spec:
           path: /var/run/docker.sock
       {{- end }}      
       initContainers:
-        - name: init-vulns
-          image: public.ecr.aws/rapidfort/init
-          command:
-            - "/bin/bash"
-            - "-c"
-            - "until [ $(curl --connect-timeout 1 -sw '%{http_code}' http://vulns-db/vulns-db/api/v1/vulnsdb -o /dev/null) -eq 200 ]; do echo backend not ready; sleep 1; done"
-        - name: init-backend
-          image: public.ecr.aws/rapidfort/init
-          command:
-            - "/bin/bash"
-            - "-c"
-            - "until [ $(curl --connect-timeout 1 -sw '%{http_code}' http://backend -o /dev/null) -eq 200 ]; do echo backend not ready; sleep 1; done"
+      {{- if .Values.init_containers }}
+      {{ tpl (toYaml (index .Values.init_containers )) . | nindent 6 }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{ if .Values.container.extra_options }}
+          {{- if .Values.container.extra_options }}
           {{- toYaml .Values.container.extra_options | nindent 10 }}
-          {{ end }}         
+          {{- end }}         
           ports:
             - name: isomaster-http
               containerPort: {{ .Values.service.container_port }}
@@ -73,10 +64,12 @@ spec:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
             {{- toYaml .Values.probeCommand | nindent 12 }}
           env:
+            - name: LC_ALL
+              value: "en_US.UTF-8"          
             - name: RF_DEBUG
               value: "{{ .Values.env.rf_debug }}"
             #start: Tunneling stub env vars
-            {{ if .Values.tunnelStubendabled }}
+            {{- if .Values.tunnelStubendabled }}
             - name: RF_CONTAINER_ENGINE
               value: "{{ default "podman" .Values.global.container_engine }}"
             - name: AMI_IMAGE_ID
@@ -91,9 +84,9 @@ spec:
               value: "{{ .Values.env.security_group_id }}"
             - name: VPC_SUBNET_ID
               value: "{{ .Values.env.vpc_subnet_id }}"
-            {{ end }}
+            {{- end }}
             #end
-            {{ if .Values.secret.name }}
+            {{- if .Values.secret.name }}
             {{- $secretName := .Values.secret.name }}
             {{- range .Values.secret.keys }}
             - name: {{ . | quote}}
@@ -107,7 +100,7 @@ spec:
                 secretKeyRef:
                   name: {{ $secretName }}
                   key: RF_APP_HOST      
-            {{ end }}
+            {{- end }}
             - name: "ISOMASTER_APP_PORT"
               value: "{{ .Values.service.container_port }}"
             - name: "BACKEND_SERVICE_NAME"
@@ -133,12 +126,12 @@ spec:
             - name: RF_REDIS_PWD
               value: "{{ .Values.env.redis_pwd }}"              
           volumeMounts:
-            {{ if .Values.volumeMounts }}
+            {{- if .Values.volumeMounts }}
             {{ tpl (toYaml (index .Values.volumeMounts )) . | nindent 12 }}
-            {{ end }}
-            {{ if .Values.extraVolumeMounts }}
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
             {{ tpl (toYaml (index .Values.extraVolumeMounts )) . | nindent 12 }}
-            {{ end }}
+            {{- end }}
             #mount docker.sock only if container engine is docker
             {{- if eq .Values.global.container_engine "docker" }}
             - name: dockersock

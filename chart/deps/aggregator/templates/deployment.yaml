@@ -55,6 +55,8 @@ spec:
           {{- toYaml .Values.container.extra_options | nindent 10 }}
           {{ end }}        
           env:
+            - name: LC_ALL
+              value: "en_US.UTF-8"
             - name: "RF_API_SERVER"
               value: "{{ .Values.env.rf_api_server }}"
             - name: "REDIS_HOST_NAME"

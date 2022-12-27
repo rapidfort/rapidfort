@@ -138,3 +138,29 @@ probeCommand:
   httpGet:
     path: /
     port: rf-scan-http  
+
+init_containers:
+  - name: init-vulns
+    image: public.ecr.aws/rapidfort/init
+    command:
+      - "/bin/bash"
+      - "-c"
+      - "until [ $(curl --connect-timeout 1 -sw '%{http_code}' http://vulns-db/vulns-db/api/v1/vulnsdb -o /dev/null) -eq 200 ]; do echo vulns-db not ready; sleep 1; done"
+  - name: init-backend
+    image: public.ecr.aws/rapidfort/init
+    command:
+      - "/bin/bash"
+      - "-c"
+      - "until [ $(curl --connect-timeout 1 -sw '%{http_code}' http://backend -o /dev/null) -eq 200 ]; do echo backend not ready; sleep 1; done"
+  #TODO: once new build has been rolled out, we can remove this
+  - image: public.ecr.aws/rapidfort/init
+    imagePullPolicy: Always
+    name: init-make-dir
+    command:
+      - /bin/bash
+      - -c
+      - |
+        echo "Creating imgs_work_dir"
+        mkdir -p /opt/rapidfort/iso-master/app/imgs_work_dir
+        echo "setting up the permission."
+        chmod 777 /opt/rapidfort/iso-master/app/imgs_work_dir
