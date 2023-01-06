@@ -26,14 +26,14 @@ backend:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/backend-exe"
-    tag: "1.1.24-rfhardened"
+    tag: "1.1.24-reg6"
 
 frontrow:
   enabled: true
   authUrl: ""
   image:
     repository: "public.ecr.aws/rapidfort/frontrow"
-    tag: "1.1.24-rfhardened"
+    tag: "1.1.24-reg6"
 
 iso-master:
   enabled: true
@@ -63,7 +63,7 @@ runner:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/runner"
-    tag: "1.1.24-rfhardened"
+    tag: "1.1.24-reg6"
 
 vulns-db:
   enabled: true
