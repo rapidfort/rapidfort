@@ -34,12 +34,6 @@ spec:
       {{- if .Values.volumes }}
       {{ tpl (toYaml (index .Values.volumes )) . | nindent 6 }}
       {{- end }}
-      #mount docker.sock only if container engine is docker
-      {{- if eq .Values.global.container_engine "docker" }}
-      - name: dockersock
-        hostPath:
-          path: /var/run/docker.sock
-      {{- end }}       
       initContainers:
       {{- if .Values.init_containers }}
       {{ tpl (toYaml (index .Values.init_containers )) . | nindent 6 }}
@@ -139,11 +133,6 @@ spec:
             {{- if .Values.volumeMounts }}
             {{ tpl (toYaml (index .Values.volumeMounts )) . | nindent 12 }}
             {{- end }}
-            #mount docker.sock only if container engine is docker
-            {{- if eq .Values.global.container_engine "docker" }}
-            - name: dockersock
-              mountPath: "/var/run/docker.sock"
-            {{- end }}            
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

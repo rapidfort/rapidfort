@@ -63,13 +63,9 @@ ingress:
   tls: []
 
 resources:
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   limits:
-    cpu: 250m
-    memory: 512Mi
+    cpu: 1000m
+    memory: 2048Mi
   requests:
     cpu: 250m
     memory: 512Mi
@@ -152,15 +148,3 @@ init_containers:
       - "/bin/bash"
       - "-c"
       - "until [ $(curl --connect-timeout 1 -sw '%{http_code}' http://backend -o /dev/null) -eq 200 ]; do echo backend not ready; sleep 1; done"
-  #TODO: once new build has been rolled out, we can remove this
-  - image: public.ecr.aws/rapidfort/init
-    imagePullPolicy: Always
-    name: init-make-dir
-    command:
-      - /bin/bash
-      - -c
-      - |
-        echo "Creating imgs_work_dir"
-        mkdir -p /opt/rapidfort/iso-master/app/imgs_work_dir
-        echo "setting up the permission."
-        chmod 777 /opt/rapidfort/iso-master/app/imgs_work_dir
