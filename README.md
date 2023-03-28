@@ -96,14 +96,14 @@ RapidFort needs an S3 bucket and an IAM user and policy with Read/List/Write per
 
 ### Deploy RapidFort
 1. Clone the GitHub RapidFort repository.
-2. Update <code>values.yaml</code> with your deployment information. For more information, please refer to [Parameters](#parameters).
+2. Create <code>values-override.yaml</code> file to update the details required for the deployment. This file will be used to override the default values with user provided vaules. For more information, please refer instructions provided in values.yaml.
 3. Run the following command to install RapidFort:
    ```
-   helm upgrade --install rapidfort ./ -f values.yaml -n <namespace>
+   helm upgrade --install rapidfort ./ -f values-override.yaml -n <namespace>
    ```
    For example, if you would like to deploy RapidFort in the <code>rapidfort</code> namespace:
    ```
-   helm upgrade --install rapidfort ./ -f values.yaml -n rapidfort
+   helm upgrade --install rapidfort ./ -f values-override.yaml -n rapidfort
    ```
 4. Wait for a RapidFort welcome email. This will contain a link to the RapidFort dashboard.
 5. Visit the RapidFort dashboard. You will be guided through the process for contacting RapidFort Support to request a license.
