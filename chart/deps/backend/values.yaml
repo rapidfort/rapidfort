@@ -19,7 +19,7 @@ env:
   communityUserId: "" #only applies for SAAS Prod
   communityOrgId: "" #only applies for SAAS Prod
 global:
-  rf_app_host: ""
+  rf_app_host:
 
 imagePullSecrets: []
 nameOverride: "backend"
@@ -103,9 +103,9 @@ secret:
     - RF_VERBOSE
     
 autoscaling:
-  enabled: false
+  enabled: true
   minReplicas: 1
-  maxReplicas: 10
+  maxReplicas: 1
   targetCPUUtilizationPercentage: 70
   targetMemoryUtilizationPercentage: 80
 
