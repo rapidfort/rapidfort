@@ -37,10 +37,15 @@ spec:
                 port:
                   number: {{ $svcPort }}
         {{- end }}
-      {{ if $rf_host }}
-      host: {{ $rf_host | quote }}
-      {{ else if .host }}
+      # {{ if $rf_host }}
+      # host: {{ $rf_host | quote }}
+      # {{ else if .host }}
+      # host: {{ .host | quote }}
+      # {{ end }}
+      {{ if .host }}
       host: {{ .host | quote }}
+      {{ else if $rf_host }}
+      host: {{ $rf_host | quote }}
       {{ end }}
   {{- end }}
 {{- end }}

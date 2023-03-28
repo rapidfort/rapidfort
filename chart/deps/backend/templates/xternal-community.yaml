@@ -35,6 +35,14 @@ spec:
             name: community-service
             port:
               number: 443
+        {{- if .Values.env.communityUserId }}
+        path: /api/v1/imgs_work_dir/{{ .Values.env.communityUserId }}/.*
+        {{ else }}
+        # this is for the production to use.
         path: /api/v1/imgs_work_dir/7b2f45e2-03f9-45bf-b301-136e8b136338/.*
+        {{- end }}
         pathType: ImplementationSpecific
+    {{- if .Values.global.rf_app_host }}
+    host: {{ .Values.global.rf_app_host }}
+    {{- end }}
 {{- end }}

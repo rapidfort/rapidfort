@@ -2,8 +2,6 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 1
-
 image:
   repository: 274057717848.dkr.ecr.us-east-1.amazonaws.com/iso-master
   pullPolicy: IfNotPresent
@@ -90,9 +88,9 @@ resources:
     memory: 1024Mi
 
 autoscaling:
-  enabled: false
+  enabled: true
   minReplicas: 1
-  maxReplicas: 5
+  maxReplicas: 1
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 

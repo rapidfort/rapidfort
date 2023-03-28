@@ -5,7 +5,6 @@ metadata:
   labels:
     {{- include "iso-master.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       {{- include "iso-master.selectorLabels" . | nindent 6 }}
@@ -68,10 +67,10 @@ spec:
               value: "en_US.UTF-8"          
             - name: RF_DEBUG
               value: "{{ .Values.env.rf_debug }}"
-            #start: Tunneling stub env vars
-            {{- if .Values.tunnelStubendabled }}
             - name: RF_CONTAINER_ENGINE
               value: "{{ default "podman" .Values.global.container_engine }}"
+            #start: Tunneling stub env vars
+            {{- if .Values.tunnelStubendabled }}
             - name: AMI_IMAGE_ID
               value: "{{ .Values.env.ami_image_id }}"
             - value: KEYPAIR_NAME

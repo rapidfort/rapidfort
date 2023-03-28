@@ -42,6 +42,7 @@ ingress:
   className: ""
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
   hosts:
     - host:
       paths:
@@ -88,7 +89,7 @@ env:
   redis_port_ha: "6379"
   redis_pwd_ha: ""
   redis_db_ha: 4
-  rfvdb_host: "frontrow.rapidfort.io"
+  rfvdb_host: "frontrow.rapidfort.com"
 
 livenessProbe:
   periodSeconds: 30
