@@ -32,8 +32,11 @@ dependencies:
 - name: runner
   repository: file://deps/runner/
   version: 1.1.0
+- name: vulns-db
+  repository: file://deps/vulns-db/
+  version: 1.1.0
 - name: fluent-bit
   repository: file://deps/fluent-bit/
   version: 1.1.0
-digest: sha256:1c23170311b437cc19b83394e86a40b23b9e7ae8b69504889bdb8e89a230b84e
-generated: "2023-03-28T10:23:32.976376428-07:00"
+digest: sha256:9e0149830c207203f5166adbad59e50a064565d46d65350c51e57e1c631e4f17
+generated: "2023-03-29T10:44:05.524537089-07:00"

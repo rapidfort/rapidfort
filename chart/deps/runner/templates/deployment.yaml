@@ -34,6 +34,12 @@ spec:
       {{ if .Values.extraVolumes }}
       {{ tpl (toYaml (index .Values.extraVolumes )) . | nindent 6 }}
       {{ end }}
+      #mount docker.sock only if container engine is docker
+      {{- if eq .Values.global.container_engine "docker" }}
+      - name: dockersock
+        hostPath:
+          path: /var/run/docker.sock
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -43,7 +49,13 @@ spec:
           {{ if .Values.container.extra_options }}
           {{- toYaml .Values.container.extra_options | nindent 10 }}
           {{ end }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "/opt/rapidfort/runner/app/prestop-hook.sh"]
           env:
+            - name: LC_ALL
+              value: "en_US.UTF-8"
             #inject create values as env variable.
             {{ if .Values.secret.name }}
             {{- $secretName := .Values.secret.name }}
@@ -58,10 +70,6 @@ spec:
             {{ if .Values.rf_role_arn }}
             - name: RF_ROLE_ARN
               value: "{{ .Values.env.rf_role_arn }}"
-            {{ end }}
-            {{ if .Values.env.rfvdb_host }}
-            - name: RFVDB_HOST
-              value: "{{ .Values.env.rfvdb_host }}"
             {{ end }}
             - name: RUNNER_APP_PORT
               value: "{{ .Values.service.container_port }}"
@@ -83,6 +91,8 @@ spec:
               value: "{{ .Values.env.redis_pwd }}"
             - name: RF_INTERNAL
               value: "1"                    
+            - name: RF_CONTAINER_ENGINE
+              value: "{{ .Values.global.container_engine }}" 
           volumeMounts:
             {{ if .Values.volumeMounts }}
             {{ tpl (toYaml (index .Values.volumeMounts )) . | nindent 12 }}
@@ -90,6 +100,11 @@ spec:
             {{ if .Values.extraVolumeMounts }}
             {{ tpl (toYaml (index .Values.extraVolumeMounts )) . | nindent 12 }}
             {{ end }}
+            #mount docker.sock only if container engine is docker
+            {{- if eq .Values.global.container_engine "docker" }}
+            - name: dockersock
+              mountPath: "/var/run/docker.sock"
+            {{- end }}
           ports:
             - name: runner-http
               containerPort: {{ .Values.service.container_port }}

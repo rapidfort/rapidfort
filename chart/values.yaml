@@ -65,6 +65,12 @@ runner:
     repository: "public.ecr.aws/rapidfort/runner"
     tag: "1.1.26-rfhardened"
 
+vulns-db:
+  enabled: true
+  image:
+    repository: "public.ecr.aws/rapidfort/vulns-db"
+    tag: "1.1.26-rfhardened"
+
 keycloak:
   enabled: true
 
