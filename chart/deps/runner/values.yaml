@@ -21,10 +21,12 @@ fullnameOverride: "runner"
 
 global:
   rf_app_host: ""
+  container_engine: "docker"
+
 
 serviceAccount:
   # Specifies whether a service account should be created
-  create: true
+  create: false
   # Annotations to add to the service account
   annotations: {}
   # The name of the service account to use.
@@ -57,17 +59,13 @@ ingress:
 
 securityContext: {}
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+resources:
+  limits:
+    cpu: 2000m
+    memory: 2048Mi
+  requests:
+    cpu: 500m
+    memory: 512Mi
 
 autoscaling:
   enabled: false
@@ -99,26 +97,26 @@ env:
   redis_port_ha: "6379"
   redis_pwd_ha: ""
   redis_db_ha: 4
-  rfvdb_host: "frontrow.rapidfort.com"
 
 volumes:
-  - name: dockersock
-    hostPath:
-      path: /var/run/docker.sock
-  - name: docker-tmp
+  - name: tmp
     hostPath:
       path: /tmp
+  - name: local-bucket
+    hostPath:
+      path: /opt/rapidfort/local-bucket/
 
 volumeMounts:
-  - name: dockersock
-    mountPath: "/var/run/docker.sock"
-  - name: docker-tmp
+  - name: tmp
     mountPath: "/tmp"
+  - name: local-bucket
+    mountPath: "/opt/rapidfort/local-bucket"
 
 livenessProbe:
-  periodSeconds: 30
-  initialDelaySeconds: 15
+  periodSeconds: 10
+  initialDelaySeconds: 5
   timeoutSeconds: 10
+  failureThreshold: 5
 
 probeCommand:  
   httpGet:
@@ -126,9 +124,13 @@ probeCommand:
     port: runner-http
 
 readinessProbe:
-  periodSeconds: 30
-  initialDelaySeconds: 15
-  timeoutSeconds: 10 
+  periodSeconds: 10
+  initialDelaySeconds: 5
+  timeoutSeconds: 10
+  failureThreshold: 5 
 
 container:
   extra_options: {}
+
+securityContext:
+  privileged: true
