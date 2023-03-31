@@ -20,56 +20,62 @@ aggregator:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/aggregator-exe"
-    tag: "1.1.26-rfhardened"
+    tag: "1.1.27-rfhardened"
 
 backend:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/backend-exe"
-    tag: "1.1.26-rfhardened"
+    tag: "1.1.27-rfhardened"
 
 frontrow:
   enabled: true
   authUrl: ""
   image:
     repository: "public.ecr.aws/rapidfort/frontrow"
-    tag: "1.1.26-rfhardened"
+    tag: "1.1.27-rfhardened"
 
 iso-master:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/iso-master-exe"
-    tag: "1.1.26-rfhardened"
+    tag: "1.1.27-rfhardened"
 
 rf-scan:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/rf-scan-exe"
-    tag: "1.1.26-rfhardened"
+    tag: "1.1.27-rfhardened"
 
 rfapi:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/rfapi-exe"
-    tag: "1.1.26-rfhardened"
+    tag: "1.1.27-rfhardened"
 
 rfpubsub:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/rfpubsub-exe"
-    tag: "1.1.26-rfhardened"
+    tag: "1.1.27-rfhardened"
 
 runner:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/runner"
-    tag: "1.1.26-rfhardened"
+    tag: "1.1.27-rfhardened"
 
 vulns-db:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/vulns-db"
-    tag: "1.1.26-rfhardened"
+    tag: "1.1.27-rfhardened"
+
+fileupload:
+  enabled: true
+  image:
+    repository: "public.ecr.aws/rapidfort/fileupload"
+    tag: "1.1.27-rfhardened"  
 
 keycloak:
   enabled: true

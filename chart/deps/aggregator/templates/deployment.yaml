@@ -61,6 +61,8 @@ spec:
               value: "{{ .Values.env.rf_api_server }}"
             - name: "REDIS_HOST_NAME"
               value: "{{ .Values.env.redis_host }}"
+            - name: RF_DEBUG
+              value:  "{{ .Values.env.rf_debug }}"              
             #inject create values as env variable.
             {{ if .Values.secret.name }}
             {{- $secretName := .Values.secret.name }}
