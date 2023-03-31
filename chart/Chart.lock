@@ -35,8 +35,11 @@ dependencies:
 - name: vulns-db
   repository: file://deps/vulns-db/
   version: 1.1.0
+- name: fileupload
+  repository: file://deps/fileupload/
+  version: 1.1.0
 - name: fluent-bit
   repository: file://deps/fluent-bit/
   version: 1.1.0
-digest: sha256:9e0149830c207203f5166adbad59e50a064565d46d65350c51e57e1c631e4f17
-generated: "2023-03-29T10:44:05.524537089-07:00"
+digest: sha256:806975bd41d60063b6ef28c441cdd377e2dce2d22daf72123c2969314e229484
+generated: "2023-03-30T18:59:39.758344116-07:00"
