@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "fileupload.fullname" . }}
+  labels:
+    {{- include "fileupload.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: fileupload-http
+      protocol: TCP
+      name: http
+    - port: 8000
+      targetPort: fileupload-http
+      protocol: TCP
+      name: http8000
+  selector:
+    {{- include "fileupload.selectorLabels" . | nindent 4 }}

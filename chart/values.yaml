@@ -19,57 +19,63 @@ ingress:
 aggregator:
   enabled: true
   image:
-    repository: "public.ecr.aws/rapidfort/aggregator-exe"
-    tag: "1.1.26-rfhardened"
+    repository: "274057717848.dkr.ecr.us-east-1.amazonaws.com/aggregator-exe"
+    tag: "1.1.0-cb555e3-5515-rfhardened"
 
 backend:
   enabled: true
   image:
-    repository: "public.ecr.aws/rapidfort/backend-exe"
-    tag: "1.1.26-rfhardened"
+    repository: "274057717848.dkr.ecr.us-east-1.amazonaws.com/backend-exe"
+    tag: "1.1.0-a825a82-5515-rfhardened"
 
 frontrow:
   enabled: true
   authUrl: ""
   image:
-    repository: "public.ecr.aws/rapidfort/frontrow"
-    tag: "1.1.26-rfhardened"
+    repository: "274057717848.dkr.ecr.us-east-1.amazonaws.com/frontrow"
+    tag: "1.1.0-b5a57672-5515-rfhardened"
 
 iso-master:
   enabled: true
   image:
-    repository: "public.ecr.aws/rapidfort/iso-master-exe"
-    tag: "1.1.26-rfhardened"
+    repository: "274057717848.dkr.ecr.us-east-1.amazonaws.com/iso-master-exe"
+    tag: "1.1.0-3c74e0f-5515-rfhardened"
 
 rf-scan:
   enabled: true
   image:
-    repository: "public.ecr.aws/rapidfort/rf-scan-exe"
-    tag: "1.1.26-rfhardened"
+    repository: "274057717848.dkr.ecr.us-east-1.amazonaws.com/rf-scan-exe"
+    tag: "1.1.0-3c74e0f-5515-rfhardened"
 
 rfapi:
   enabled: true
   image:
-    repository: "public.ecr.aws/rapidfort/rfapi-exe"
-    tag: "1.1.26-rfhardened"
+    repository: "274057717848.dkr.ecr.us-east-1.amazonaws.com/rfapi-exe"
+    tag: "1.1.0-5ebb9b2-5515-rfhardened"
 
 rfpubsub:
   enabled: true
   image:
-    repository: "public.ecr.aws/rapidfort/rfpubsub-exe"
-    tag: "1.1.26-rfhardened"
+    repository: "274057717848.dkr.ecr.us-east-1.amazonaws.com/rfpubsub-exe"
+    tag: "1.1.0-14ac482-5515-rfhardened"
 
 runner:
   enabled: true
   image:
-    repository: "public.ecr.aws/rapidfort/runner"
-    tag: "1.1.26-rfhardened"
+    repository: "274057717848.dkr.ecr.us-east-1.amazonaws.com/runner"
+    tag: "1.1.0-e818f3b-5515-rfhardened"
 
 vulns-db:
   enabled: true
   image:
-    repository: "public.ecr.aws/rapidfort/vulns-db"
-    tag: "1.1.26-rfhardened"
+    repository: "274057717848.dkr.ecr.us-east-1.amazonaws.com/vulns-db"
+    tag: "1.1.0-b42a4af-5515-rfhardened"
+
+fileupload:
+  enabled: true
+  image:
+    repository: "274057717848.dkr.ecr.us-east-1.amazonaws.com/fileupload"
+    tag: "1.1.0-7aaa6aa-5572-rfhardened"  
 
 keycloak:
   enabled: true
