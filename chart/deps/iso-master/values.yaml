@@ -22,8 +22,10 @@ env:
   #Tunnel Stub variables. - END
   backend_service_name: "backend"
   debug: off
-  rf_debug: false 
+  rf_debug: false
   redis_host: "redis"
+  redis_host_locks: lock-redis
+  redis_host_files: files-redis  
   redis_port: "6379"
   redis_pwd: "" 
   redis_host_ha: "redis"

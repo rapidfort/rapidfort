@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "fileupload.fullname" . }}
+  labels:
+    {{- include "fileupload.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "fileupload.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "fileupload.selectorLabels" . | nindent 8 }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      serviceAccountName: {{ include "fileupload.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:          
+      {{- if .Values.volumes }}
+      {{- tpl (toYaml (index .Values.volumes )) . | nindent 6 }}
+      {{- end }}
+      {{- if .Values.extraVolumes }}
+      {{- tpl (toYaml (index .Values.extraVolumes )) . | nindent 6 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.container.extra_options }}
+          {{- toYaml .Values.container.extra_options | nindent 10 }}
+          {{- end }}
+          env:
+            - name: LC_ALL
+              value: "en_US.UTF-8"          
+            - name: FILEUPLOAD_APP_PORT
+              value: "{{ .Values.service.container_port }}"
+            - name: RF_DEBUG
+              value:  "{{ .Values.env.rf_debug }}"
+            {{- if .Values.secret.name }}
+            {{- $secretName := .Values.secret.name }}
+            {{- range .Values.secret.keys }}
+            - name: {{ . | quote}}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $secretName }}
+                  key: {{ . | quote}}
+            {{- end }}
+            {{- end }}
+          volumeMounts:
+            {{- if .Values.volumeMounts }}
+            {{- tpl (toYaml (index .Values.volumeMounts )) . | nindent 12 }}
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- tpl (toYaml (index .Values.extraVolumeMounts )) . | nindent 12 }}
+            {{- end }}
+          ports:
+            - name: fileupload-http
+              containerPort: {{ .Values.service.container_port }}
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+            {{- toYaml .Values.probeCommand | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+            {{- toYaml .Values.probeCommand | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}

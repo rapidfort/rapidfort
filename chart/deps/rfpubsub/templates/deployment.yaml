@@ -58,6 +58,10 @@ spec:
               value: "{{ .Values.env.redis_db_ha }}"
             - name: RF_REDIS_HOST_NAME
               value: "{{ .Values.env.redis_host }}"
+            - name: RF_REDIS_HOST_NAME_LOCKS
+              value: "{{ .Values.env.redis_host_locks }}"
+            - name: RF_REDIS_HOST_NAME_FILES
+              value: "{{ .Values.env.redis_host_files }}"
             - name: RF_REDIS_PORT
               value: "{{ .Values.env.redis_port }}"
             - name: RF_REDIS_PWD
