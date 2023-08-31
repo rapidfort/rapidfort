@@ -18,6 +18,9 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     nginx.ingress.kubernetes.io/upstream-vhost: {{ default .Values.allowed_rf_host .Values.global.allowed_rf_host }}
+    {{- with .Values.community_ingress.annotations }}
+      {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   ingressClassName: {{ default .Values.ingress.className .Values.global.ingressClassName }}
   rules:

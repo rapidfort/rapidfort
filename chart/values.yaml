@@ -5,6 +5,7 @@ secret:
   s3_bucket: ""
   rf_app_admin: ""
   rf_app_admin_passwd: ""
+  storage_type: ""
   rf_app_host: "" # This field is used to provide the rapidfort service FQDN (if FQDN is not available use IP ADDRESS) to internal service
 
 global:
@@ -20,56 +21,62 @@ aggregator:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/aggregator-exe"
-    tag: "1.1.26-rfhardened"
+    tag: "1.1.33-rfhardened"
 
 backend:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/backend-exe"
-    tag: "1.1.26-rfhardened"
+    tag: "1.1.33-rfhardened"
 
 frontrow:
   enabled: true
   authUrl: ""
   image:
     repository: "public.ecr.aws/rapidfort/frontrow"
-    tag: "1.1.26-rfhardened"
+    tag: "1.1.33-rfhardened"
 
 iso-master:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/iso-master-exe"
-    tag: "1.1.26-rfhardened"
+    tag: "1.1.33-rfhardened"
 
 rf-scan:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/rf-scan-exe"
-    tag: "1.1.26-rfhardened"
+    tag: "1.1.33-rfhardened"
 
 rfapi:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/rfapi-exe"
-    tag: "1.1.26-rfhardened"
+    tag: "1.1.33-rfhardened"
 
 rfpubsub:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/rfpubsub-exe"
-    tag: "1.1.26-rfhardened"
+    tag: "1.1.33-rfhardened"
 
 runner:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/runner"
-    tag: "1.1.26-rfhardened"
+    tag: "1.1.33-rfhardened"
 
 vulns-db:
   enabled: true
   image:
     repository: "public.ecr.aws/rapidfort/vulns-db"
-    tag: "1.1.26-rfhardened"
+    tag: "1.1.33-rfhardened"
+
+fileupload:
+  enabled: true
+  image:
+    repository: "public.ecr.aws/rapidfort/fileupload"
+    tag: "1.1.33-rfhardened"  
 
 keycloak:
   enabled: true
@@ -78,6 +85,12 @@ mysql:
   enabled: true
 
 redis:
+  enabled: true
+
+lock-redis:
+  enabled: true
+
+files-redis:
   enabled: true
 
 logger:

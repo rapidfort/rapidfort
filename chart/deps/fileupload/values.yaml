@@ -1,0 +1,114 @@
+# Default values for fileupload.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: 274057717848.dkr.ecr.us-east-1.amazonaws.com/fileupload
+  pullPolicy: IfNotPresent
+
+tunnelStubendabled: false
+
+imagePullSecrets: []
+nameOverride: "fileupload"
+fullnameOverride: "fileupload"
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+  container_port: 8080
+
+ingress:
+  enabled: true
+  className: ""
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 1024m
+  hosts:
+    - host: 
+      paths:
+        - path: /upload
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 512Mi
+
+tolerations: []
+
+affinity: {}
+
+global:
+  rf_app_host:
+env:
+  rf_debug: false
+
+secret:
+  name: "rf-secret"
+  keys:
+    - RF_S3_BUCKET
+    - RF_STORAGE_TYPE
+    - KEYCLOAK_JWT_PUB_KEY
+    - KEYCLOAK_REALM
+    - KEYCLOAK_CLIENT_ID
+    - KEYCLOAK_SERVICE_ACCOUNT_CLIENT_ID
+    - KEYCLOAK_SERVICE_ACCOUNT_CLIENT_SECRET
+    
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 1
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+container:
+  extra_options: {}
+
+volumes:
+  - name: local-bucket
+    hostPath:
+      path: /opt/rapidfort/local-bucket/
+volumeMounts:
+  - name: local-bucket
+    mountPath: "/opt/rapidfort/local-bucket"
+
+livenessProbe:
+  periodSeconds: 30
+  initialDelaySeconds: 15
+  timeoutSeconds: 99
+
+readinessProbe:
+  periodSeconds: 30
+  initialDelaySeconds: 15
+  timeoutSeconds: 99
+
+probeCommand:
+ httpGet:
+   path: /
+   port: fileupload-http

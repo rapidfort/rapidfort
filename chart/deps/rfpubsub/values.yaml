@@ -14,6 +14,8 @@ env:
   api_key: "03f4b34739f506f88c9bbc3410b5d070"
   rf_debug: false
   redis_host: "redis"
+  redis_host_locks: lock-redis
+  redis_host_files: files-redis
   redis_port: "6379"
   redis_pwd: "" 
   redis_host_ha: "redis"
@@ -38,12 +40,12 @@ fullnameOverride: "rfpubsub"
 
 serviceAccount:
   # Specifies whether a service account should be created
-  create: true
+  create: false
   # Annotations to add to the service account
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
-  name: ""
+  name: "default"
 
 podAnnotations: {}
 
