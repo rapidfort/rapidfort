@@ -1,0 +1,11 @@
+{{- if .Values.redis_config.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: files-redis-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "files-redis.selectorLabels" . | nindent 4 }}
+data:
+  {{ (tpl (.Files.Glob "config_map/*.conf").AsConfig $ ) | nindent 2 }}
+{{- end }}

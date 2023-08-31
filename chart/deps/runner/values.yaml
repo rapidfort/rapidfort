@@ -11,7 +11,7 @@ image:
 
 initContainer:
   image:
-    repository: public.ecr.aws/rapidfort/init 
+    repository: public.ecr.aws/rapidfort/init
     pullPolicy: IfNotPresent
     tag: "latest"
 
@@ -87,6 +87,15 @@ secret:
   - AWS_DEFAULT_REGION
   - RF_APP_ADMIN
   - RF_APP_ADMIN_PASSWD
+  - DB_URL
+  - RF_GS_CREDS
+  - RF_ROLE_ARN
+  - RF_S3_BUCKET
+  - RF_STORAGE_TYPE
+  - RF_AZURE_CONNECTION_STRING
+  - AWS_ACCESS_KEY_ID
+  - AWS_SECRET_ACCESS_KEY
+  - KEYCLOAK_JWT_PUB_KEY
 
 env:
   rf_debug: false
@@ -97,11 +106,12 @@ env:
   redis_port_ha: "6379"
   redis_pwd_ha: ""
   redis_db_ha: 4
+  backend_service_name: "backend"
 
 volumes:
   - name: tmp
-    hostPath:
-      path: /tmp
+    emptyDir:
+      sizeLimit: 10Gi
   - name: local-bucket
     hostPath:
       path: /opt/rapidfort/local-bucket/
@@ -118,7 +128,7 @@ livenessProbe:
   timeoutSeconds: 10
   failureThreshold: 5
 
-probeCommand:  
+probeCommand:
   httpGet:
     path: /
     port: runner-http
@@ -127,7 +137,7 @@ readinessProbe:
   periodSeconds: 10
   initialDelaySeconds: 5
   timeoutSeconds: 10
-  failureThreshold: 5 
+  failureThreshold: 5
 
 container:
   extra_options: {}

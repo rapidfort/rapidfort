@@ -35,12 +35,18 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
-        - name: init
+        - name: init-host-redis-check
           image: public.ecr.aws/rapidfort/init
           command:
             - "/bin/bash"
             - "-c"
-            - "until [ $(redis-cli -h {{ .Values.env.redis_host }} -p {{ .Values.env.redis_port }} ping) == 'PONG' ]; do echo redis not ready; sleep 1; done"
+            - "until [ $(redis-cli -h {{ .Values.env.redis_host_locks }} -p {{ .Values.env.redis_port }} ping) == 'PONG' ]; do echo redis not ready; sleep 1; done"
+        - name: init-files-redis-check
+          image: public.ecr.aws/rapidfort/init
+          command:
+            - "/bin/bash"
+            - "-c"
+            - "until [ $(redis-cli -h {{ .Values.env.redis_host_files }} -p {{ .Values.env.redis_port }} ping) == 'PONG' ]; do echo redis not ready; sleep 1; done"            
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -70,6 +76,10 @@ spec:
               value: "{{ .Values.env.rf_debug }}"
             - name: RF_REDIS_HOST_NAME
               value: "{{ .Values.env.redis_host }}"
+            - name: RF_REDIS_HOST_NAME_LOCKS
+              value: "{{ .Values.env.redis_host_locks }}"
+            - name: RF_REDIS_HOST_NAME_FILES
+              value: "{{ .Values.env.redis_host_files }}"
             - name: RF_REDIS_PORT
               value: "{{ .Values.env.redis_port }}"
             - name: RF_REDIS_PWD

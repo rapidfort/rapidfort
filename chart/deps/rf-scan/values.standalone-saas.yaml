@@ -1,0 +1,7 @@
+init_containers:
+  - name: init-backend
+    image: public.ecr.aws/rapidfort/init
+    command:
+      - "/bin/bash"
+      - "-c"
+      - "until [ $(curl --connect-timeout 1 -sw '%{http_code}' http://backend -o /dev/null) -eq 200 ]; do echo backend not ready; sleep 1; done"

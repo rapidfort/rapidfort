@@ -92,7 +92,9 @@ spec:
             - name: RF_INTERNAL
               value: "1"                    
             - name: RF_CONTAINER_ENGINE
-              value: "{{ .Values.global.container_engine }}" 
+              value: "{{ .Values.global.container_engine }}"
+            - name: BACKEND_SERVICE_NAME
+              value: "{{ .Values.env.backend_service_name }}"              
           volumeMounts:
             {{ if .Values.volumeMounts }}
             {{ tpl (toYaml (index .Values.volumeMounts )) . | nindent 12 }}

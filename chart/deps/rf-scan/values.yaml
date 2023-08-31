@@ -14,6 +14,8 @@ env:
   debug: off
   rf_debug: false
   redis_host: "redis"
+  redis_host_locks: lock-redis
+  redis_host_files: files-redis
   redis_port: "6379"
   redis_pwd: "" 
   redis_host_ha: "redis"
@@ -27,12 +29,12 @@ fullnameOverride: "rf-scan"
 
 serviceAccount:
   # Specifies whether a service account should be created
-  create: true
+  create: false
   # Annotations to add to the service account
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
-  name: ""
+  name: "default"
 
 podAnnotations: {}
 
@@ -101,6 +103,7 @@ secret:
     - RF_APP_HOST
     - DEPLOY_MODE
     - RF_VERBOSE
+    - RF_AZURE_CONNECTION_STRING    
 
 volumes:
   - name: local-bucket

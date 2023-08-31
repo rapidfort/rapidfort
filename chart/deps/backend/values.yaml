@@ -43,6 +43,9 @@ service:
   port: 80
   container_port: 8080
 
+community_ingress:
+  annotations: {}
+  
 ingress:
   enabled: true
   className: ""
@@ -101,6 +104,7 @@ secret:
     - RF_APP_ADMIN
     - RF_APP_ADMIN_PASSWD
     - RF_VERBOSE
+    - RF_AZURE_CONNECTION_STRING    
     
 autoscaling:
   enabled: true
