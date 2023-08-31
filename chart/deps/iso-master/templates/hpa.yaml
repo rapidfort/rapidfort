@@ -1,5 +1,5 @@
 {{- if .Values.autoscaling.enabled }}
-apiVersion: {{ include "iso-master.ingress.apiVersion" . }}
+apiVersion: {{ include "iso-master.autoscaler.apiVersion" . }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "iso-master.fullname" . }}

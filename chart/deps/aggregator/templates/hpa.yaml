@@ -1,5 +1,5 @@
 {{- if .Values.autoscaling.enabled }}
-apiVersion: {{ include "aggregator.ingress.apiVersion" . }}
+apiVersion: {{ include "aggregator.autoscaler.apiVersion" . }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "aggregator.fullname" . }}
