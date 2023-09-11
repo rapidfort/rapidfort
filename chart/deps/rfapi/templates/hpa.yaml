@@ -1,5 +1,5 @@
 {{- if .Values.autoscaling.enabled }}
-apiVersion: {{ include "rfapi.ingress.apiVersion" . }}
+apiVersion: {{ include "rfapi.autoscaler.apiVersion" . }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "rfapi.fullname" . }}

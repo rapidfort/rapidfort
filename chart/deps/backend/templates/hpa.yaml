@@ -1,5 +1,5 @@
 {{- if .Values.autoscaling.enabled }}
-apiVersion: {{ include "backend.ingress.apiVersion" . }}
+apiVersion: {{ include "backend.autoscaler.apiVersion" . }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "backend.fullname" . }}

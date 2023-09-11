@@ -12,14 +12,6 @@ global:
 
 tunnelStubendabled: false
 env:
-  #Tunnel Stub variables. - START
-  ami_image_id: "ami-06fb837f38439836e"
-  vm_scheduler_port: 80
-  vm_server_addr: vm-scheduler
-  vmpool_server_addr: ""
-  security_group_id: "sg-0cb2f23f1b8da8468"
-  vpc_subnet_id: "subnet-0f8c9a907f6bb6c94"
-  #Tunnel Stub variables. - END
   backend_service_name: "backend"
   debug: off
   rf_debug: false
@@ -148,9 +140,6 @@ volumes:
   - name: imgs-work-dir
     hostPath:
       path: /opt/rapidfort/data/shared/imgs_work_dir
-  - name: image-db
-    hostPath:
-      path: /opt/rapidfort/data/shared/image_db
   - name: local-bucket
     hostPath:
       path: /opt/rapidfort/local-bucket/
@@ -158,8 +147,6 @@ volumes:
 volumeMounts:
   - name: imgs-work-dir
     mountPath: "/opt/rapidfort/iso-master/app/imgs_work_dir"
-  - name: image-db
-    mountPath: "/opt/rapidfort/iso-master/app/image_db"
   - name: local-bucket
     mountPath: "/opt/rapidfort/local-bucket"
 
