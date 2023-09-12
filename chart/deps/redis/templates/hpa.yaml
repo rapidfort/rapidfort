@@ -1,5 +1,5 @@
 {{- if .Values.autoscaling.enabled }}
-apiVersion: autoscaling/v2
+apiVersion: {{ include "redis.autoscaler.apiVersion" . }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "redis.fullname" . }}

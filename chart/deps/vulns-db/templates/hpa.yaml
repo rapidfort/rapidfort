@@ -1,15 +1,15 @@
 {{- if .Values.autoscaling.enabled }}
-apiVersion: {{ include "rfpubsub.autoscaler.apiVersion" . }}
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "rfpubsub.fullname" . }}
+  name: {{ include "vulns-db.fullname" . }}
   labels:
-    {{- include "rfpubsub.labels" . | nindent 4 }}
+     {{- include "vulns-db.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "rfpubsub.fullname" . }}
+    name: {{ include "vulns-db.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:

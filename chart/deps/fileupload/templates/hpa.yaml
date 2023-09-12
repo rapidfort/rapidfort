@@ -1,5 +1,5 @@
 {{- if .Values.autoscaling.enabled }}
-apiVersion: {{ include "fileupload.ingress.apiVersion" . }}
+apiVersion: {{ include "fileupload.autoscaler.apiVersion" . }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "fileupload.fullname" . }}

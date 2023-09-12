@@ -67,22 +67,6 @@ spec:
               value: "en_US.UTF-8"
             - name: RF_DEBUG
               value: "{{ .Values.env.rf_debug }}"
-            #start: Tunneling stub env vars
-            {{- if .Values.tunnelStubendabled }}
-            - name: AMI_IMAGE_ID
-              value: "{{ .Values.env.ami_image_id }}"
-            - value: KEYPAIR_NAME
-              name: "rf-iso-worker-1.0"
-            - name: VMPOOL_APP_PORT
-              value: "{{ .Values.env.vm_scheduler_port }}"
-            - name: VMPOOL_SERVER_ADDR
-              value: "{{ .Values.env.vm_server_addr }}"
-            - name: SECGROUP_ID
-              value: "{{ .Values.env.security_group_id }}"
-            - name: VPC_SUBNET_ID
-              value: "{{ .Values.env.vpc_subnet_id }}"
-            {{- end }}
-            #end
             {{- if .Values.secret.name }}
             {{- $secretName := .Values.secret.name }}
             {{- range .Values.secret.keys }}
