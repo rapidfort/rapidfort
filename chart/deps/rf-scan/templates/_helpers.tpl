@@ -61,7 +61,7 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
-{{- define "rf-scan.ingress.apiVersion" -}}
+{{- define "rf-scan.autoscaler.apiVersion" -}}
   {{- if and (.Capabilities.APIVersions.Has "autoscaling/v2") (semverCompare ">= 1.23" .Capabilities.KubeVersion.Version) -}}
       {{- print "autoscaling/v2" -}}  
   {{- else if .Capabilities.APIVersions.Has "autoscaling/v2beta2" -}}

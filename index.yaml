@@ -2,10 +2,10 @@ apiVersion: v1
 entries:
   aggregator:
   - apiVersion: v2
-    appVersion: 1.1.33-rfhardened
-    created: "2023-08-30T18:03:27.484434894-07:00"
+    appVersion: 1.1.34-rfhardened
+    created: "2023-09-11T17:21:40.316483792-07:00"
     description: A Helm chart for Kubernetes
-    digest: f60c1dfc5559ad68f5dcfa8cfec47e92d118d7c66be81b6dd71f170a74ea670d
+    digest: 56f6cfc0604b78455a220b6a580a39ceba1a505e30be645f36074264c5f8b9e2
     name: aggregator
     type: application
     urls:
@@ -13,10 +13,10 @@ entries:
     version: 1.1.0
   backend:
   - apiVersion: v2
-    appVersion: 1.1.33-rfhardened
-    created: "2023-08-30T18:03:27.48508758-07:00"
+    appVersion: 1.1.34-rfhardened
+    created: "2023-09-11T17:21:40.317072104-07:00"
     description: A Helm chart for Kubernetes
-    digest: ff2a2ca9e517599f03aaa6f870e5bf6192289ea98c2556c88c1d8db3fc9f569a
+    digest: 8ea3fbf5e15febb27aab21c14bd216b2231e0d1d71816b05818f0c7aa77d36fe
     name: backend
     type: application
     urls:
@@ -25,9 +25,9 @@ entries:
   files-redis:
   - apiVersion: v2
     appVersion: "6.2"
-    created: "2023-08-30T18:03:27.485541727-07:00"
+    created: "2023-09-11T17:21:40.317506393-07:00"
     description: A Helm chart for Kubernetes
-    digest: 05d766bfece9567fc3953041716670c90c9a3f4ef735262fb82554be7daa10fc
+    digest: 658913efb1efddd7a43f59799221a09ba32321d1017ef9a0211e6decd0802bd7
     name: files-redis
     type: application
     urls:
@@ -35,10 +35,10 @@ entries:
     version: 1.1.0
   fileupload:
   - apiVersion: v2
-    appVersion: 1.1.33-rfhardened
-    created: "2023-08-30T18:03:27.486119575-07:00"
+    appVersion: 1.1.34-rfhardened
+    created: "2023-09-11T17:21:40.317987912-07:00"
     description: A Helm chart for Kubernetes
-    digest: 1e4037592fe2b8e261b553f6ddfeaf94666b8367996f7d054c0b48a8a739f1e5
+    digest: 68497153b72b6d9262667cfc994ad6d329f3b41d1694d1fb9eaa376c2452f894
     name: fileupload
     type: application
     urls:
@@ -47,9 +47,9 @@ entries:
   fluent-bit:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2023-08-30T18:03:27.486502079-07:00"
+    created: "2023-09-11T17:21:40.31830393-07:00"
     description: A Helm chart for Kubernetes
-    digest: 7a3c276c2394ef2feb8f8192d54619b3d48b1412330cf92e78b47a977d38d581
+    digest: 08bb9551d821908dbfdf56351ad97f88e0ed6cea76f4306f087447b0401e78a7
     name: fluent-bit
     type: application
     urls:
@@ -57,10 +57,10 @@ entries:
     version: 1.1.0
   frontrow:
   - apiVersion: v2
-    appVersion: 1.1.33-rfhardened
-    created: "2023-08-30T18:03:27.487066548-07:00"
+    appVersion: 1.1.34-rfhardened
+    created: "2023-09-11T17:21:40.319155332-07:00"
     description: A Helm chart for Kubernetes
-    digest: b920edf54f8ed3508af60d6caa1cae1996827198ae9eb800b066ca0e02733fdb
+    digest: 1c99c9439ce61e16f7bf2b880aa03d1547d6b216f0d7a3518c1ca80f19d51f6f
     name: frontrow
     type: application
     urls:
@@ -68,10 +68,10 @@ entries:
     version: 1.1.0
   iso-master:
   - apiVersion: v2
-    appVersion: 1.1.33-rfhardened
-    created: "2023-08-30T18:03:27.487849821-07:00"
+    appVersion: 1.1.34-rfhardened
+    created: "2023-09-11T17:21:40.319840323-07:00"
     description: A Helm chart for Kubernetes
-    digest: a25dd6fe341f15193fa57896fdc252275041c69ae7bf348b951b41a3048f8a61
+    digest: 4d5e15290a0b8e5edc8a577d0ee60dc5c2be537c190f0842b93055c4126db1aa
     name: iso-master
     type: application
     urls:
@@ -80,9 +80,9 @@ entries:
   keycloak:
   - apiVersion: v2
     appVersion: 16.1.1
-    created: "2023-08-30T18:03:27.48835273-07:00"
+    created: "2023-09-11T17:21:40.320256957-07:00"
     description: A Helm chart for Kubernetes
-    digest: f2e299c4ef072d6ff1dd16e9fc30e432d0c1af13ce11ba6001e440959323d8d9
+    digest: 5efbfe1cd0e050800229841a0ff85448905d56f814e3da8856f85883103a1eac
     name: keycloak
     type: application
     urls:
@@ -91,9 +91,9 @@ entries:
   lock-redis:
   - apiVersion: v2
     appVersion: "6.2"
-    created: "2023-08-30T18:03:27.488810278-07:00"
+    created: "2023-09-11T17:21:40.320653211-07:00"
     description: A Helm chart for Kubernetes
-    digest: e35556caa51404e4ddf7d1a8ccf8f69ee71e5788e7f1c40a53abdc3cc78db907
+    digest: 6376371808afd9da3e155259377dbc72aea6fd4452bd85ce6ccfef4fb7caaee6
     name: lock-redis
     type: application
     urls:
@@ -102,9 +102,9 @@ entries:
   mysql:
   - apiVersion: v2
     appVersion: "8.0"
-    created: "2023-08-30T18:03:27.491351261-07:00"
+    created: "2023-09-11T17:21:40.322933298-07:00"
     description: A Helm chart for Kubernetes
-    digest: e52ac8677db97fda4c06c232af3f8c3ee879ace577ba165d2365dcad2e668a44
+    digest: 25f30444c82cc210fb972f300b1a622036ede0d2a96ba398ec9af2762d186c84
     name: mysql
     type: application
     urls:
@@ -113,9 +113,9 @@ entries:
   redis:
   - apiVersion: v2
     appVersion: "6.2"
-    created: "2023-08-30T18:03:27.491853577-07:00"
+    created: "2023-09-11T17:21:40.323384403-07:00"
     description: A Helm chart for Kubernetes
-    digest: 20f2ce4047369780324cbea09eac3e38876a6e312a9aea69db2c29063522c9cb
+    digest: 5add3a02be6e634c7b9c0c022b245888172916738fa8f4db0e6e32009f43020a
     name: redis
     type: application
     urls:
@@ -123,10 +123,10 @@ entries:
     version: 1.1.0
   rf-scan:
   - apiVersion: v2
-    appVersion: 1.1.33-rfhardened
-    created: "2023-08-30T18:03:27.492452547-07:00"
+    appVersion: 1.1.34-rfhardened
+    created: "2023-09-11T17:21:40.324111535-07:00"
     description: A Helm chart for Kubernetes
-    digest: 373ee4781a0358b316361615edda06a8ced0dc54e1849c52d5b91aca80682f03
+    digest: dbb4fbd33d2ad6789d6a24553ed2ba9c1f08f2515b78cff218698420d96e7339
     name: rf-scan
     type: application
     urls:
@@ -134,10 +134,10 @@ entries:
     version: 1.1.0
   rfapi:
   - apiVersion: v2
-    appVersion: 1.1.33-rfhardened
-    created: "2023-08-30T18:03:27.492975092-07:00"
+    appVersion: 1.1.34-rfhardened
+    created: "2023-09-11T17:21:40.324873373-07:00"
     description: A Helm chart for Kubernetes
-    digest: f589791732674b616b311f185aed6ec646c4e27fad83b5c59960fc5828f56b84
+    digest: 2752ee95591bad7fea3b8d09f002d0fe56ff6cd75f21cb65f770fe1552c5fcb4
     name: rfapi
     type: application
     urls:
@@ -145,10 +145,10 @@ entries:
     version: 1.1.0
   rfpubsub:
   - apiVersion: v2
-    appVersion: 1.1.33-rfhardened
-    created: "2023-08-30T18:03:27.493472017-07:00"
+    appVersion: 1.1.34-rfhardened
+    created: "2023-09-11T17:21:40.325727028-07:00"
     description: A Helm chart for Kubernetes
-    digest: f8553d130595b9cc529656333c3a54c17f1d7acdcca02ed98e14265028408ca5
+    digest: fd419ef0dc5a468a87fda22d34641ed1f649a725c7585de235277db2781724df
     name: rfpubsub
     type: application
     urls:
@@ -156,10 +156,10 @@ entries:
     version: 1.1.0
   runner:
   - apiVersion: v2
-    appVersion: 1.1.33-rfhardened
-    created: "2023-08-30T18:03:27.494044058-07:00"
+    appVersion: 1.1.34-rfhardened
+    created: "2023-09-11T17:21:40.326621287-07:00"
     description: A Helm chart for Kubernetes
-    digest: b7fb6a66ff3d6da6c7343c042bbfce3f949c143441baf1601aca4f7fb6517688
+    digest: 86520622100e62795d7c4c4466d1baced3cc5a1ed36623d05e91c2a476aacf20
     name: runner
     type: application
     urls:
@@ -167,13 +167,13 @@ entries:
     version: 1.1.0
   vulns-db:
   - apiVersion: v2
-    appVersion: 1.1.33-rfhardened
-    created: "2023-08-30T18:03:27.494509471-07:00"
+    appVersion: 1.1.34-rfhardened
+    created: "2023-09-11T17:21:40.327397198-07:00"
     description: A Helm chart for Kubernetes
-    digest: 2a14e7e30910a1ed6d26876efd885d2aa087609e7771b877a3c1019694694370
+    digest: 64715d5c348b27dd7126e46b6e051085a1d2befc30b23780b40a986adfdb4c5a
     name: vulns-db
     type: application
     urls:
     - charts/vulns-db-1.1.0.tgz
     version: 1.1.0
-generated: "2023-08-30T18:03:27.48378993-07:00"
+generated: "2023-09-11T17:21:40.315924644-07:00"

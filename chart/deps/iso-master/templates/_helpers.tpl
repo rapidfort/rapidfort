@@ -62,7 +62,7 @@ Create the name of the service account to use
 {{- end -}}
 {{- end -}}
 
-{{- define "iso-master.ingress.apiVersion" -}}
+{{- define "iso-master.autoscaler.apiVersion" -}}
   {{- if and (.Capabilities.APIVersions.Has "autoscaling/v2") (semverCompare ">= 1.23" .Capabilities.KubeVersion.Version) -}}
       {{- print "autoscaling/v2" -}}  
   {{- else if .Capabilities.APIVersions.Has "autoscaling/v2beta2" -}}
